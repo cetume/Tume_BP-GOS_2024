@@ -22,7 +22,7 @@ rule plot_rare_variants:
             level = "{LEVEL}"
     log:    "../results/00LOG/rare_variants/snRNAseq_plot_rare_variants_{LEVEL}.log"
     script:
-            "../scripts/snRNAseq_plot_rare_variants_new.R"
+            "../scripts/snRNAseq_plot_rare_variants.R"
 
 rule plot_rare_variants_dwnSmpl:
     input:  "../results/rare_variants/wilcoxon_df_herring_dwnSmpl_lvl{LEVEL}.txt"
@@ -33,4 +33,4 @@ rule plot_rare_variants_dwnSmpl:
             level = "{LEVEL}"
     log:    "../results/00LOG/rare_variants/snRNAseq_plot_rare_variants_dwnSmpl_{LEVEL}.log"
     script:
-            "../scripts/snRNAseq_plot_rare_variants_dwnSmpl_new.R"
+            "../scripts/snRNAseq_plot_rare_variants_dwnSmpl.R"
