@@ -11,7 +11,7 @@ The snRNAseq data for this study was taken from [Herring et al. (2022)](https://
 #### Scripts:
 1. [snRNAseq_prep_herring_data.py](workflow/scripts/snRNAseq_prep_herring_data.py) - Extract cell and gene metadata from snRNAseq dataset
 2. [snRNAseq_prep_herring_data_and_dwnSmpl.R](workflow/scripts/snRNAseq_prep_herring_data_and_dwnSmpl.R) - Prepare Herring data for analysis 
-3. [snRNAseq_rm_MHC_from_ref_new.R](workflow/scripts/snRNAseq_rm_MHC_from_ref_new.R) - Prepare genome reference for MAGMA and LDSR (identify and remove genes in the MHC region)
+3. [snRNAseq_rm_MHC_from_ref_new.R](workflow/scripts/snRNAseq_rm_MHC_from_ref_new.R) - Prepare genome reference for MAGMA and LDSR
 4. [snRNAseq_prep_enrich_files_methodB.R](workflow/scripts/snRNAseq_prep_enrich_files_methodB.R) - Generate specificity scores and top 10% genesets for enrichment analyses
 <!-- 5. snRNAseq_get_and_munge_GWAS_for_MAGMA.sh - Download and prepare GWAS summary statistics for [schizophrenia](https://figshare.com/ndownloader/files/28169757) ([Trubetskoy et al., 2022](https://doi.org/10.1038/s41586-022-04434-5)) and [height](https://portals.broadinstitute.org/collaboration/giant/images/6/63/Meta-analysis_Wood_et_al%2BUKBiobank_2018.txt.gz) ([Yengo et al., 2018](https://doi.org/10.1093/hmg/ddy271)) -->
 <!-- 6. snRNAseq_plot_MAGMA_and_LDSR.R -->
