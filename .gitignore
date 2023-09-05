@@ -20,3 +20,5 @@ workflow/scripts/snRNAseq_rm_MHC_from_ref.R
 results/R_objects/*
 results/gene_lists/prep_*
 results/ctd_objects/*
+results/rare_variants/boxplots_temp/*
+results/rare_variants/rare_variants_analysis_*
