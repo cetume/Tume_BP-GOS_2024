@@ -3,8 +3,14 @@ results/00LOG/*
 results/LDSR_annotation_files/*
 config/profile/*
 results/logs/*
-#results/magma/*
-#!results/magma/*.gsa.out
+results/magma/*.magma.genes.out
+results/magma/*.gsa.sets.genes.out
+results/magma/*.genes.raw
+results/magma/*.log
+results/magma/*.genes.out
+results/magma/*.log.suppl
+results/magma/*.gsa.genes.out
+results/magma/*.genes.annot
 results/GWAS_for_ldsc/*
 results/GWAS_for_MAGMA/*
 #results/LDSR_part_herit/baseline_v1.2/*
