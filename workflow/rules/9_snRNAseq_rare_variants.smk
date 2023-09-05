@@ -18,10 +18,11 @@ rule plot_rare_variants:
     output: "../results/figures/wilcoxon_herring_lvl{LEVEL}_plot.jpeg"
     resources: slurm_extra = "--use-singularity"
     singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
-    params: fig_dir = "../results/figures/"
+    params: fig_dir = "../results/figures/",
+            level = "{LEVEL}"
     log:    "../results/00LOG/rare_variants/snRNAseq_plot_rare_variants_{LEVEL}.log"
     script:
-            "../scripts/snRNAseq_plot_rare_variants.R"
+            "../scripts/snRNAseq_plot_rare_variants_new.R"
 
 rule plot_rare_variants_dwnSmpl:
     input:  "../results/rare_variants/wilcoxon_df_herring_dwnSmpl_lvl{LEVEL}.txt"
@@ -32,4 +33,4 @@ rule plot_rare_variants_dwnSmpl:
             level = "{LEVEL}"
     log:    "../results/00LOG/rare_variants/snRNAseq_plot_rare_variants_dwnSmpl_{LEVEL}.log"
     script:
-            "../scripts/snRNAseq_plot_rare_variants_dwnSmpl.R"
+            "../scripts/snRNAseq_plot_rare_variants_dwnSmpl_new.R"
