@@ -61,7 +61,7 @@ rule ldsr_stratified_summary:
     resources: slurm_extra = "--use-conda"
     message: "Creating summary file for snRNAseq dwnSmpl: {wildcards.GWAS} GWAS"
     params:  dir = "../results/LDSR_part_herit/baseline_v1.2/herring/",
-             cell_types = "../resources/sheets/{celltypes}.tsv"
+             cell_types = "../resources/sheets/celltypes.tsv"
     log:     "../results/00LOG/LDSR/herring/snRNAseq.{GWAS}_baseline.v1.2_partHerit.summary.log"
     shell:
              """

@@ -24,4 +24,4 @@ By default, this pipeline will analyse the dataset using two annotation levels:
 * Level 1 = 19 major cell clusters
 * Level 2 = 84 sub cell clusters
 
-If you choose to run only annotation level 1 or level 2, the cell types you are not including must be blanked out and the required celltypes.tsv (both, lvl1_only, lvl2_only) file for LDSR must be selected in the config.yaml file.
+If you choose to run only annotation level 1 or level 2, the cell types you are not including must be blanked out in config.yaml and removed from celltypes.tsv, which is used in the LDSR rule files 5-7.

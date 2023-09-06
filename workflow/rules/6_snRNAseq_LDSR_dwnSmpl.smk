@@ -58,7 +58,7 @@ rule ldsr_stratified_summary_dwnSmpl:
     output:  "../results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv"
     message: "Creating summary file for {wildcards.GWAS} GWAS"
     params:  dir = "../results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/",
-             cell_types = "../resources/sheets/{celltypes}.tsv"
+             cell_types = "../resources/sheets/celltypes.tsv"
     log:     "../results/00LOG/LDSR/herring_dwnSmpl/snRNAseq.{GWAS}_baseline.v1.2_partHerit.summary.log"
     shell:
              """
