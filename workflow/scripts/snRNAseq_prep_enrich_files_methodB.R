@@ -200,7 +200,7 @@ MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hg
                                                 
  }
 
-##Additional analysis to run top 1000 genes rather than top 10% -----------------------
+##Additional analysis to run top 2000 genes rather than top 10% -----------------------
 
 for(level in c(1,2)) {
 if (study_id == 'herring' ) {
@@ -208,7 +208,7 @@ if (study_id == 'herring' ) {
 sub_dir <- 'herring/'
 magma_end <- paste0('_lvl', level)
 
-cat('\nCreating Enrichment files for top 1000 genes ... \n\n')
+cat('\nCreating Enrichment files for top 2000 genes ... \n\n')
 load(paste0(ctd_outdir,	'ctd_',	study_id, '.rda'))
 CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
 
@@ -216,28 +216,28 @@ MAGMA <- as_tibble(ctd[[level]]$specificity, rownames = 'hgnc') %>%
     inner_join(gene_coord_obj) %>%
     tidyr::pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
     group_by(cell_type) %>%
-    top_n(n = 1000, wt = specificity) %>%
+    top_n(n = 2000, wt = specificity) %>%
     dplyr::select(cell_type, ensembl) %>%
     with(., split(ensembl, cell_type))
 
   for(i in names(MAGMA)) {
 
     cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
-        file = paste0(outdir, sub_dir, 'MAGMA/', study_id, '_top1000', magma_end, '.txt')
+        file = paste0(outdir, sub_dir, 'MAGMA/', study_id, '_top2000', magma_end, '.txt')
         , sep = '', append = TRUE)
 
   }
 
-dir.create(paste0(outdir, sub_dir, 'LDSR_top1000_genes/'),  recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0(outdir, sub_dir, 'LDSR_top2000_genes/'),  recursive = TRUE, showWarnings = FALSE)
 
   LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity), rownames = 'hgnc') %>%
     inner_join(gene_coord_obj) %>%
     pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
     mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
     group_by(cell_type) %>%
-    top_n(n = 1000, wt = specificity) %>%
+    top_n(n = 2000, wt = specificity) %>%
     dplyr::select(chr, start, end, ensembl, cell_type) %>%
-    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top1000_genes/',
+    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top2000_genes/',
                                             .y$cell_type, '.lvl', level,'.100UP_100DOWN.bed'), col_names = FALSE))
 
   }
