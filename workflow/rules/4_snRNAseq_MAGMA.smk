@@ -69,7 +69,7 @@ rule magma_gene_set_analysis_top1000:
     input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
              data = "../results/gene_lists/herring/MAGMA/herring_top1000_lvl{LEVEL}.txt"
     output:  "../results/magma/snRNAseq_{GWAS}.herring.top1000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.top1000.lvl{LEVEL}.magma.35UP_10DOWN"
+    params:  out = "../results/magma/snRNAseq_{GWAS}.herring.top1000.lvl{LEVEL}.magma.35UP_10DOWN"
     resources: slurm_extra = "--use-conda"
     message: "Running magma gene set analysis step for top1000 {wildcards.GWAS}, cluster level {wildcards.LEVEL}"
     log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.top1000.35UP_10DOWN.lvl_{LEVEL}.35UP_10DOWN.log"
