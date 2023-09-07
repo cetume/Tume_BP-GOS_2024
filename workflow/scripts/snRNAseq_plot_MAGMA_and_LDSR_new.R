@@ -10,6 +10,11 @@ print(R.version)
 
 ##  Load Packages  --------------------------------------------------------------------
 library(dplyr)
+library(readr)
+library(tidyr)
+library(stringr)
+library(janitor)
+library(ggplot2)
 library(ggsignif)
 library(cowplot)
 library(reshape2)
@@ -17,22 +22,26 @@ library(reshape2)
 ## Set variables  ---------------------------------------------------------------------
 cat('\nPlotting MAGMA and SLDSR results ... \n')
 
-magma <- toString(snakemake@input[['MAGMA']])
-ldsr <- toString(snakemake@input[['LDSR']])
-GWAS <- snakemake@input[[1]] #1st wildcard?
+magma <- toString(snakemake@input[['magma']])
+ldsr <- toString(snakemake@input[['ldsr']])
+GWAS <- toString(snakemake@params[['GWAS']])
 study_id <- toString(snakemake@params[['study_id']])
 level <- toString(snakemake@params[['level']])
 fig_dir <- toString(snakemake@params[['fig_dir']])
 
-dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
+## Report inputs  ---------------------------------------------------------------------
+#cat('\nVariables set to: \n\n')
+#tibble(Variable = c('magma', 'ldsr', 'GWAS', 'level', 'fig_dir', 'study_id'),
+#       Value = c(magma, ldsr, GWAS, level, fig_dir, study_id))
 
+dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
 
 ##Preparing MAGMA data ----------------------------------------------------------------
 cat('\nPreparing MAGMA data ... \n')
 
 if (level == 1) {
 
-BF_CORR <- 0.05/
+BF_CORR <- 0.05/19
 WIDTH <- 6
 
 } else {
@@ -68,8 +77,7 @@ MAGMA_PLOT <- ggplot(data = MAGMA_DF, aes(x = MAGMA, y = factor(Category, rev(le
               legend.position = "none") +
         xlab(expression(-log[10](P))) +
         ylab('Cell type') +
-        xlim(0, 8) +
-        facet_wrap(~cell_type, scales = "free")
+        xlim(0, 8)
 
 #assign(paste0('magma_', GWAS, '.', study_id, '_lvl', level, '_df'), MAGMA_DF, envir = .GlobalEnv)
 #assign(paste0('magma_', GWAS, '.', study_id, '_lvl', level, '_plot'), MAGMA_PLOT, envir = .GlobalEnv)
@@ -83,7 +91,7 @@ LDSR_FULL_DF <- read_tsv(ldsr) %>%
           separate(Category, into=c('Category', 'Window'), sep = '\\.', extra = "merge")
 
 LDSR_DF <- LDSR_FULL_DF %>%
-          dplyr::select(Category, LDSR, cell_type)
+          dplyr::select(Category, LDSR)
 
 LDSR_PLOT <- ggplot(data = LDSR_DF, aes(x = LDSR, y = factor(Category, rev(levels(factor(Category)))),
                                                 fill = '#F8766D')) +
@@ -104,8 +112,7 @@ LDSR_PLOT <- ggplot(data = LDSR_DF, aes(x = LDSR, y = factor(Category, rev(level
               legend.position = "none") +
         xlab(expression(-log[10](P))) +
         ylab('Cell type') +
-        xlim(0, 8) +
-        facet_wrap(~cell_type, scales = "free")
+        xlim(0, 8)
 
 #assign(paste0('ldsr_', GWAS, '.', study_id, '_lvl', level, '_df'), LDSR_DF, envir = .GlobalEnv)
 #assign(paste0('ldsr_', GWAS, '.', study_id, '_lvl', level, '_full_df'), LDSR_FULL_DF, envir = .GlobalEnv)
@@ -120,6 +127,8 @@ BF_CORR <- 0.05/19
 
 PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
                          by = 'Category') %>% reshape2::melt()
+
+head(PLOT_DF)
 
 MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(Category, rev(levels(factor(Category)))),
                                                   fill = variable, group = rev(variable))) +

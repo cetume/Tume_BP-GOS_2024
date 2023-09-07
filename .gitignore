@@ -15,8 +15,10 @@ results/GWAS_for_ldsc/*
 results/GWAS_for_MAGMA/*
 #results/LDSR_part_herit/baseline_v1.2/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
-#results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.log
-#results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.results
+results/LDSR_part_herit/baseline_v1.2/herring/*.log
+results/LDSR_part_herit/baseline_v1.2/herring/*.results
+results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.results
 #!results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.tsv
 workflow/*.log
 resources/*
