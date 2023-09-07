@@ -39,48 +39,12 @@ dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
 ##Preparing MAGMA data ----------------------------------------------------------------
 cat('\nPreparing MAGMA data ... \n')
 
-if (level == 1) {
-
-BF_CORR <- 0.05/19
-WIDTH <- 6
-
-} else {
-
-BF_CORR <- 0.05/84
-WIDTH <- 11
-
-}
-
 MAGMA_DF <- read.table(magma, header = FALSE) %>%
         janitor::row_to_names(row_number = 1) %>%
         mutate(VARIABLE = gsub('\\.', '-', VARIABLE)) %>%
         mutate(MAGMA = -log10(as.numeric(P))) %>%
         dplyr::select(VARIABLE, MAGMA) %>%
         dplyr::rename(Category = VARIABLE)
-
-MAGMA_PLOT <- ggplot(data = MAGMA_DF, aes(x = MAGMA, y = factor(Category, rev(levels(factor(Category)))),
-                                                fill = '#F8766D')) +
-        geom_bar(stat = "identity", color = 'black', position = "dodge") +
-        geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
-        geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
-        theme_bw() +
-        ggtitle(paste0(GWAS)) +
-        theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              panel.border = element_rect(colour = "black", linewidth = 1),
-              plot.title = element_text(hjust = 0.5, face = 'bold'),
-              axis.title.x = element_text(colour = "#000000", size = 14),
-              axis.title.y = element_text(colour = "#000000", size = 14),
-              axis.text.x  = element_text(colour = "#000000", size = 13, vjust = 0.5),
-              axis.text.y  = element_text(colour = "#000000", size = 8),
-              legend.position = "none") +
-        xlab(expression(-log[10](P))) +
-        ylab('Cell type') +
-        xlim(0, 8)
-
-#assign(paste0('magma_', GWAS, '.', study_id, '_lvl', level, '_df'), MAGMA_DF, envir = .GlobalEnv)
-#assign(paste0('magma_', GWAS, '.', study_id, '_lvl', level, '_plot'), MAGMA_PLOT, envir = .GlobalEnv)
 
 ##Preparing LDSR data -----------------------------------------------------------------
 cat('\nPreparing LDSR data ... \n')
@@ -93,42 +57,17 @@ LDSR_FULL_DF <- read_tsv(ldsr) %>%
 LDSR_DF <- LDSR_FULL_DF %>%
           dplyr::select(Category, LDSR)
 
-LDSR_PLOT <- ggplot(data = LDSR_DF, aes(x = LDSR, y = factor(Category, rev(levels(factor(Category)))),
-                                                fill = '#F8766D')) +
-        geom_bar(stat = "identity", color = 'black', position = "dodge") +
-        geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
-        geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
-        theme_bw() +
-        ggtitle(paste0(GWAS)) +
-        theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              panel.border = element_rect(colour = "black", size = 1),
-              plot.title = element_text(hjust = 0.5, face = 'bold'),
-              axis.title.x = element_text(colour = "#000000", size = 14),
-              axis.title.y = element_text(colour = "#000000", size = 14),
-              axis.text.x  = element_text(colour = "#000000", size = 13, vjust = 0.5),
-              axis.text.y  = element_text(colour = "#000000", size = 8),
-              legend.position = "none") +
-        xlab(expression(-log[10](P))) +
-        ylab('Cell type') +
-        xlim(0, 8)
-
-#assign(paste0('ldsr_', GWAS, '.', study_id, '_lvl', level, '_df'), LDSR_DF, envir = .GlobalEnv)
-#assign(paste0('ldsr_', GWAS, '.', study_id, '_lvl', level, '_full_df'), LDSR_FULL_DF, envir = .GlobalEnv)
-#assign(paste0('ldsr_', GWAS, '.', study_id, '_lvl', level, '_plot'), LDSR_PLOT, envir = .GlobalEnv)
-
 ##Plot MAGMA and LDSR barplot for lvl1 ------------------------------------------------
 cat('\nCreate MAGMA and LDSR joint plots ... \n')
 
-if (level == 1){
+if (level == 1) {
 
 BF_CORR <- 0.05/19
+WIDTH <- 6
 
 PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
                          by = 'Category') %>% reshape2::melt()
 
-head(PLOT_DF)
 
 MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(Category, rev(levels(factor(Category)))),
                                                   fill = variable, group = rev(variable))) +
@@ -198,6 +137,7 @@ PLOT_mean$COLOUR <- factor(PLOT_mean$COLOUR, levels = colour_table$COLOUR)
 } else {
 
 BF_CORR <- 0.05/84
+WIDTH <- 11
 
 PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
                          by = 'Category') %>% reshape2::melt() %>%
@@ -296,5 +236,5 @@ plot(MAGMA_LDSR_MEAN_PLOT)
 dev.off()
 
 jpeg(file = paste0(fig_dir, GWAS, '_magma_ldsr_', study_id, end, '_plot.jpeg'), units = "in", width = WIDTH, height = 11, res = 300)
-plot()
-dev.off(MAGMA_LDSR_PLOT)
+plot(MAGMA_LDSR_PLOT)
+dev.off()
