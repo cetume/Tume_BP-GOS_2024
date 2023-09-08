@@ -21,7 +21,6 @@ The snRNAseq data for this study was taken from [Herring et al. (2022)](https://
 The singularity container used to run the R scripts in this pipeline was generated in [Sylabs](https://cloud.sylabs.io/), using the following definition file:
 
 ```
-
 Bootstrap: docker
 From: bioconductor/bioconductor_docker:devel
 
@@ -49,7 +48,6 @@ From: bioconductor/bioconductor_docker:devel
     R --no-echo -e 'install.packages("scCustomize")'
     R --no-echo -e 'BiocManager::install("SeuratWrappers")'
     R --no-echo -e 'BiocManager::install("scuttle")'
-
 ```
 
 #### Running the Snakemake Pipeline:
