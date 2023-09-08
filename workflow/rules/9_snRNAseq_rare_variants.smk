@@ -7,30 +7,9 @@ rule rare_variants:
     singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
     params: study_id = "{project}",
             rare_dir = "../results/rare_variants/",
-            fig_dir = "../results/rare_variants/boxplots_temp/{project}/",
+            boxplots_dir = "../results/rare_variants/boxplots_temp/{project}/",
+            fig_dir = "../results/figures/",
             ctd_dir = "../results/ctd_objects/"
     log:    "../results/00LOG/rare_variants/snRNAseq_rare_variants_{project}.log"
     script:
-            "../scripts/snRNAseq_rare_variants.R"
-
-rule plot_rare_variants:
-    input:  "../results/rare_variants/wilcoxon_df_herring_lvl{LEVEL}.txt"
-    output: "../results/figures/wilcoxon_herring_lvl{LEVEL}_plot.jpeg"
-    resources: slurm_extra = "--use-singularity"
-    singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
-    params: fig_dir = "../results/figures/",
-            level = "{LEVEL}"
-    log:    "../results/00LOG/rare_variants/snRNAseq_plot_rare_variants_{LEVEL}.log"
-    script:
-            "../scripts/snRNAseq_plot_rare_variants.R"
-
-rule plot_rare_variants_dwnSmpl:
-    input:  "../results/rare_variants/wilcoxon_df_herring_dwnSmpl_lvl{LEVEL}.txt"
-    output: "../results/figures/wilcoxon_herring_dwnSmpl_lvl{LEVEL}_plot.jpeg"
-    resources: slurm_extra = "--use-singularity"
-    singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
-    params: fig_dir = "../results/figures/",
-            level = "{LEVEL}"
-    log:    "../results/00LOG/rare_variants/snRNAseq_plot_rare_variants_dwnSmpl_{LEVEL}.log"
-    script:
-            "../scripts/snRNAseq_plot_rare_variants_dwnSmpl.R"
+            "../scripts/snRNAseq_rare_variants_new.R"
