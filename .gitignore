@@ -19,9 +19,16 @@ results/LDSR_part_herit/baseline_v1.2/herring/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.results
+results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*.log
+results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*.results
 #!results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.tsv
 workflow/*.log
-resources/*
+resources/containers/*
+resources/ldsr/
+resources/raw_data/*
+resources/refs/*
+resources/sheets/*
+!resources/sheets/celltypes.tsv
 workflow/rules/old/*
 workflow/envs/*
 workflow/scripts/snRNAseq_rm_MHC_from_ref.R

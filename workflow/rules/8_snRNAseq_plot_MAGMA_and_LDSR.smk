@@ -30,18 +30,18 @@ rule plot_MAGMA_and_LDSR_data_dwnSmpl:
     script:
             "../scripts/snRNAseq_plot_MAGMA_and_LDSR_new.R"
 
-rule plot_MAGMA_and_LDSR_data_top2000:
-    input:  magma = "../results/magma/snRNAseq_{GWAS}.herring_top2000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out",
-            ldsr = "../results/LDSR_part_herit/baseline_v1.2/herring/top2000_genes/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", 
-    output: "../results/figures/{GWAS}_magma_ldsr_herring_top2000_lvl{LEVEL}_plot.jpeg"
+rule plot_MAGMA_and_LDSR_data_top1000:
+    input:  magma = "../results/magma/snRNAseq_{GWAS}.herring_top1000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out",
+            ldsr = "../results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", 
+    output: "../results/figures/{GWAS}_magma_ldsr_herring_top1000_lvl{LEVEL}_plot.jpeg"
     resources: slurm_extra = "--use-singularity"
     singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
-    params: study_id = "herring_top2000",
+    params: study_id = "herring_top1000",
             magma_dir = "../results/magma/",
-            ldsr_dir = "../results/LDSR_part_herit/baseline_v1.2/herring/top2000_genes/",
+            ldsr_dir = "../results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/",
             fig_dir = "../results/figures/",
        	    GWAS = "{GWAS}",
        	    level = "{LEVEL}"
-    log:    "../results/00LOG/plot_magma_and_ldsr/snRNAseq_plot_magma_and_ldsr_{GWAS}_herring_top2000_lvl{LEVEL}.log"
+    log:    "../results/00LOG/plot_magma_and_ldsr/snRNAseq_plot_magma_and_ldsr_{GWAS}_herring_top1000_lvl{LEVEL}.log"
     script:
             "../scripts/snRNAseq_plot_MAGMA_and_LDSR_new.R"
