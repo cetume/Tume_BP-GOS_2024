@@ -219,17 +219,7 @@ PLOT_mean$COLOUR <- factor(PLOT_mean$COLOUR, levels = colour_table$COLOUR)
 
 ##Produce final plots -----------------------------------------------------------------
 
-cat('\nSave plots ... \n')
-
-if (study_id == 'herring' || study_id == 'herring_top1000') {
-
 end <- paste0('_lvl', level)
-
-} else {
-
-end <- ''
-
-}
 
 jpeg(file = paste0(fig_dir, GWAS, '_magma_ldsr_mean_', study_id, end, '_plot.jpeg'), units = "in", width = WIDTH, height = 11, res = 300)
 plot(MAGMA_LDSR_MEAN_PLOT)
