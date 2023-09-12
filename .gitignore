@@ -1,4 +1,5 @@
 workflow/.snakemake/*
+workflow/.cache/
 results/00LOG/*
 results/LDSR_annotation_files/*
 config/profile/*
@@ -21,6 +22,8 @@ results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.results
 results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*.results
+results/LDSR_part_herit/baseline_v1.2/herring/top2000_genes/*.log
+results/LDSR_part_herit/baseline_v1.2/herring/top2000_genes/*.results
 #!results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.tsv
 workflow/*.log
 resources/containers/*

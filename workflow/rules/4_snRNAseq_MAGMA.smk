@@ -68,8 +68,8 @@ rule magma_gene_set_analysis_dwnSmpl:
 rule magma_gene_set_analysis_top2000:
     input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
              data = "../results/gene_lists/herring/MAGMA/herring_top2000_lvl{LEVEL}.txt"
-    output:  "../results/magma/snRNAseq_{GWAS}.herring.top2000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.herring.top2000.lvl{LEVEL}.magma.35UP_10DOWN"
+    output:  "../results/magma/snRNAseq_{GWAS}.herring_top2000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
+    params:  out = "../results/magma/snRNAseq_{GWAS}.herring_top2000.lvl{LEVEL}.magma.35UP_10DOWN"
     resources: slurm_extra = "--use-conda"
     message: "Running magma gene set analysis step for top2000 {wildcards.GWAS}, cluster level {wildcards.LEVEL}"
     log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.top2000.35UP_10DOWN.lvl_{LEVEL}.35UP_10DOWN.log"
