@@ -86,6 +86,7 @@ for (CELL_TYPE in colnames(specificity_DF)) {
 
 specificity_cell <- data.frame(gene = specificity_DF$gene,
     cell_scores = specificity_DF[[CELL_TYPE]]) %>%
+    filter(cell_scores > 0) %>%
     mutate(study_status = ifelse(gene %in% STUDY_GENES, 'in_study', 'not_in_study'))
     
     in_study_scores <- specificity_cell %>%
