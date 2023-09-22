@@ -8,8 +8,10 @@
 cat('\nRemove MHC genes from gene ref file ... \n')
 ref_in <- toString(snakemake@input)
 ref_noMHC <- toString(snakemake@params[['ref_noMHC']])
+protein_ref_noMHC <- toString(snakemake@params[['protein_ref_noMHC']])
 gene_coord_rds <- toString(snakemake@output[['gene_coord']])
 mhc_genes_rds <- toString(snakemake@output[['mhc_genes']])
+protein_gene_coord_rds <- toString(snakemake@output[['protein_gene_coord']])
 
 ## Initialise R library  --------------------------------------------------------------
 R.Version()
@@ -24,7 +26,7 @@ mart_hg19 <- useMart('ENSEMBL_MART_ENSEMBL', host = 'https://grch37.ensembl.org'
 mart_hg19 <- useDataset('hsapiens_gene_ensembl', mart_hg19)
 mhc_genes <- getBM(attributes = c("external_gene_name", "chromosome_name", "start_position", "end_position"),
                    filters = c("chromosome_name","start","end"),
-                   values = list(chromosome = "6", start = "28477797", end = "33448354"), #hg19 coords (https://doi.org/10.1038/s41431-019-0559-2)
+                   values = list(chromosome = "6", start = "28477797", end = "33448354"), #hg19 coords
                    mart = mart_hg19)
 mhc_genes_uniq <- stringi::stri_remove_empty(unique(mhc_genes$external_gene_name), na_empty = FALSE)
 cat('MHC genes:', length(mhc_genes_uniq), '\n')
@@ -59,7 +61,7 @@ duplicates_to_remove <- annot_lookup_hg19_dup[!annot_lookup_hg19_dup$ensembl_gen
 annot_lookup_hg19_filtered <- annot_lookup_hg19[!annot_lookup_hg19$ensembl_gene_id %in% duplicates_to_remove$ensembl_gene_id, ]
 annot_lookup_hg19_filtered <- annot_lookup_hg19_filtered[!duplicated(annot_lookup_hg19_filtered$external_gene_name), ] #remove remaining duplicates (7 genes) 
 
-# Remove MHC gene from gene coordinate reference file (and write to file)  ------------
+# Remove MHC genes from gene coordinate reference file (and write to file) ------------
 cat('Removing MHC genes from gene coord ref (and writing) ...\n')
 gene_coordinates <- annot_lookup_hg19_filtered %>% 
   dplyr::rename(chr = "chromosome_name", ensembl = "ensembl_gene_id", 
@@ -70,8 +72,21 @@ gene_coordinates <- annot_lookup_hg19_filtered %>%
   mutate(chr = paste0("chr", chr)) %>%
   dplyr::select(chr, start, end, ensembl, hgnc)  
 
+# Generate ref filtered for protein coding genes only and remove MHC genes ------------
+cat('Removing MHC genes from gene coord ref protein coding genes only (and writing) ...\n')
+protein_gene_coordinates <- annot_lookup_hg19_filtered %>%
+  filter(gene_biotype == 'protein_coding') %>%
+  dplyr::rename(chr = "chromosome_name", ensembl = "ensembl_gene_id",
+                start = 'start_position', end = 'end_position', hgnc = 'external_gene_name') %>%
+  dplyr::select(ensembl, chr, start, end, strand, hgnc) %>%
+  filter(!hgnc %in% mhc_genes_uniq) %>%
+  write_tsv(protein_ref_noMHC, col_names = FALSE) %>%
+  mutate(chr = paste0("chr", chr)) %>%
+  dplyr::select(chr, start, end, ensembl, hgnc)
+
 saveRDS(mhc_genes_uniq, mhc_genes_rds)
 saveRDS(gene_coordinates, gene_coord_rds)
+saveRDS(protein_gene_coordinates, protein_gene_coord_rds)
 
 cat('Done.\n')
 #--------------------------------------------------------------------------------------

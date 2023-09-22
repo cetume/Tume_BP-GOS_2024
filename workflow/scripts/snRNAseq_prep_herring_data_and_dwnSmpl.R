@@ -64,6 +64,8 @@ seurat_herring <- subset(seurat_herring, subset = cell_count_per_cluster >= 50) 
 
 ## Downsample data - standardise cell count across cell populations -------------------
 
+#set.seed(123)
+
 # Level 1 - major clusters - downsampled to lowest cell count - LAMP5_NOS1 = 837
 seurat_herring_dwnSmpl_lvl1 <- seurat_herring
 Idents(seurat_herring_dwnSmpl_lvl1) <- seurat_herring_dwnSmpl_lvl1@meta.data$major_clust
