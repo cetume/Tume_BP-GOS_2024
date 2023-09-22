@@ -105,13 +105,13 @@ CELL_TYPE:
 
 GWAS:
     SCZ:
-    HEIGHT:
+#    HEIGHT:
 
 LEVEL:
     1:
     2:
 
 project:
-    herring:
-#    herring_dwnSmpl_lvl1:
-#    herring_dwnSmpl_lvl2:
+#    herring:
+    herring_dwnSmpl_lvl1:
+    herring_dwnSmpl_lvl2:

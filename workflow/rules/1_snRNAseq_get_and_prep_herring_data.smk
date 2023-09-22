@@ -14,17 +14,17 @@ rule download_herring_data:
              wget https://storage.googleapis.com/neuro-dev/Processed_data/RNA-all_full-counts-and-downsampled-CPM.h5ad -P {params.ourdir}
              """
 
-rule prep_herring_data_for_R:
-    input:   "../resources/raw_data/herring_2022/RNA-all_full-counts-and-downsampled-CPM.h5ad"
-    output:  counts = "../resources/raw_data/herring_2022/data_for_R/herring_counts.mtx",
-             cellMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_cellMeta.csv",
-             geneMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_geneMeta.csv"
-    resources: tasks = 1, mem_mb = 15000, slurm_extra = "--use-conda"
-    message: "Preparing herring data for R"
-    log:     "../results/logs/herring/snRNAseq.prep.herring.log"
-    script:  
-             "../scripts/snRNAseq_prep_herring_data.py"
-
+#rule prep_herring_data_for_R:
+#    input:   "../resources/raw_data/herring_2022/RNA-all_full-counts-and-downsampled-CPM.h5ad"
+#    output:  counts = "../resources/raw_data/herring_2022/data_for_R/herring_counts.mtx",
+#             cellMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_cellMeta.csv",
+#             geneMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_geneMeta.csv"
+#    resources: tasks = 1, mem_mb = 15000, slurm_extra = "--use-conda"
+#    message: "Preparing herring data for R"
+#    log:     "../results/logs/herring/snRNAseq.prep.herring.log"
+#    script:  
+#             "../scripts/snRNAseq_prep_herring_data.py"
+#
 rule prep_herring_data_and_dwnSmpl_for_ctd:
     input:  counts = "../resources/raw_data/herring_2022/data_for_R/herring_counts.mtx",
             cellMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_cellMeta.csv",
