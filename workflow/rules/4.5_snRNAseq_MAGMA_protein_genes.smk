@@ -1,4 +1,4 @@
-rule magma_map_snps_to_protein_genes:
+rule magma_map_snps_to_genes_protein_coding:
     input:   snp_loc = "../resources/refs/g1000_eur.bim",
              gene_loc = "../results/R_objects/Ensembl.hg19.MHCremoved.protein.gene.loc.txt"
     output:  "../results/magma/snRNAseq.magma.35UP_10DOWN.protein.genes.annot"
@@ -15,7 +15,7 @@ rule magma_map_snps_to_protein_genes:
 
             """)
 
-rule magma_gene_analysis:
+rule magma_gene_analysis_protein_coding:
     input:   gene_annot = "../results/magma/snRNAseq.magma.35UP_10DOWN.protein.genes.annot",
              gwas = "../results/GWAS_for_MAGMA/{GWAS}_hg19_magma_ready.tsv"
     output:  "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.protein.genes.raw",
@@ -33,7 +33,7 @@ rule magma_gene_analysis:
 
              """
 
-rule magma_gene_set_analysis:
+rule magma_gene_set_analysis_protein_coding:
     input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.protein.genes.raw",
              data = "../results/gene_lists/herring/MAGMA/herring_protein_coding_lvl{LEVEL}.txt"
     output:  "../results/magma/snRNAseq_{GWAS}.herring_protein_coding.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"

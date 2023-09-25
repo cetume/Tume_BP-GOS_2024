@@ -190,7 +190,7 @@ LDSR input files - 100UP_100DOWN
         mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
         dplyr::select(chr, start, end, ensembl, cell_type) %>%
         group_by(cell_type) %>%
-        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, '/LDSR_protein_coding/',
+        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_protein_coding/',
                                                 .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
 
  }
