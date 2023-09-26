@@ -45,3 +45,19 @@ rule plot_MAGMA_and_LDSR_data_top2000:
     log:    "../results/00LOG/plot_magma_and_ldsr/snRNAseq_plot_magma_and_ldsr_{GWAS}_herring_top2000_lvl{LEVEL}.log"
     script:
             "../scripts/snRNAseq_plot_MAGMA_and_LDSR_new.R"
+
+rule plot_MAGMA_and_LDSR_data_protein_coding:
+    input:  magma = "../results/magma/snRNAseq_{GWAS}.herring_protein_coding.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out",
+            ldsr = "../results/LDSR_part_herit/baseline_v1.2/herring/protein_coding/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv",
+    output: "../results/figures/{GWAS}_magma_ldsr_herring_protein_coding_lvl{LEVEL}_plot.jpeg"
+    resources: slurm_extra = "--use-singularity"
+    singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
+    params: study_id = "herring_protein_coding",
+            magma_dir = "../results/magma/",
+            ldsr_dir = "../results/LDSR_part_herit/baseline_v1.2/herring/protein_coding/",
+            fig_dir = "../results/figures/",
+            GWAS = "{GWAS}",
+            level = "{LEVEL}"
+    log:    "../results/00LOG/plot_magma_and_ldsr/snRNAseq_plot_magma_and_ldsr_{GWAS}_herring_protein_coding_lvl{LEVEL}.log"
+    script:
+            "../scripts/snRNAseq_plot_MAGMA_and_LDSR_new.R"

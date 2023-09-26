@@ -35,6 +35,8 @@ results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/test_1/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/test_1/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/test_2/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/test_2/*.results
+results/LDSR_part_herit/baseline_v1.2/herring/protein_coding/*.log
+results/LDSR_part_herit/baseline_v1.2/herring/protein_coding/*.results
 #!results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.tsv
 workflow/*.log
 resources/containers/*

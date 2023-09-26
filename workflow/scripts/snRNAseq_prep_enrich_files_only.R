@@ -35,9 +35,9 @@ sink(file = log, type = c("output", "message"))
 
 ## Report inputs  ---------------------------------------------------------------------
 cat('\nVariables set to: \n\n')
-tibble(Variable = c('gene_coord', 'ctd_object', 'outdir',
+tibble(Variable = c('gene_coord', 'protein_gene_coord', 'ctd_object', 'outdir',
                     'outfile', 'study_id', 'threads'),
-       Value = c(gene_coord, ctd_object, outdir, outfile, study_id,
+       Value = c(gene_coord, protein_gene_coord, ctd_object, outdir, outfile, study_id,
                  threads))
 
 dir.create(outdir,  recursive = TRUE, showWarnings = FALSE)
@@ -45,7 +45,7 @@ dir.create(outdir,  recursive = TRUE, showWarnings = FALSE)
 ## Load RDS objects  ------------------------------------------------------------------
 cat('\nLoad RDS objects ... \n\n')
 gene_coord_obj <- readRDS(gene_coord)
-protein_gene_coord_object <- readRDS(protein_gene_coord)
+protein_gene_coord_obj <- readRDS(protein_gene_coord)
 
 ## Create enrichment files for MAGMA and LDSR -----------------------------------------
 
@@ -182,7 +182,7 @@ MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hg
 
 dir.create(paste0(outdir, sub_dir, 'LDSR_protein_coding/'),  recursive = TRUE, showWarnings = FALSE)
 
-LDSR input files - 100UP_100DOWN
+#LDSR input files - 100UP_100DOWN
     LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
         inner_join(protein_gene_coord_obj) %>%
         pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
@@ -194,7 +194,7 @@ LDSR input files - 100UP_100DOWN
                                                 .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
 
  }
-
+}
 
 
 

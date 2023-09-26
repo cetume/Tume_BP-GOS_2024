@@ -1,0 +1,24 @@
+# MEAN_SAMPLE_SIZE = 3110
+# TOTAL_GENES = 18694
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar)
+# CONDITIONED_INTERNAL = gene size, gene density, sample size, inverse mac, log(gene size), log(gene density), log(sample size), log(inverse mac)
+VARIABLE          TYPE  NGENES         BETA     BETA_STD           SE            P
+Astro              SET    1510      0.11256     0.030671     0.050006     0.012205
+CGE_dev            SET     809    -0.039921   -0.0081232     0.066053       0.7272
+ID2                SET    1211     -0.18679    -0.045976      0.05387      0.99974
+L2-3_CUX2          SET    1326    -0.056615    -0.014534     0.051977      0.86196
+L4_RORB            SET    1204    -0.067861    -0.016659     0.055219      0.89044
+L5-6_THEMIS        SET    1239     -0.12298    -0.030595     0.053483      0.98925
+L5-6_TLE4          SET    1207     -0.06611    -0.016248     0.053912      0.88994
+LAMP5_NOS1         SET    1062     -0.15607    -0.036127       0.0593      0.99575
+MGE_dev            SET     929     0.025776    0.0056016       0.0616      0.33782
+Micro              SET    1634     0.078074     0.022051      0.04875     0.054646
+Oligo              SET    1649      0.17796     0.050471      0.04734   8.5593e-05
+OPC                SET    1435     0.057169      0.01522     0.051122      0.13173
+PN_dev             SET     864     -0.17591    -0.036935     0.064266       0.9969
+Poor-Quality       SET    1490    -0.044489     -0.01205     0.049681      0.81473
+PV                 SET    1245     -0.18879    -0.047071     0.054307      0.99974
+PV_SCUBE3          SET    1057     -0.12354    -0.028534     0.057722      0.98382
+SST                SET    1339     -0.17413    -0.044903     0.053466      0.99944
+Vas                SET    1459      0.19049       0.0511     0.049641   6.2445e-05
+VIP                SET    1192     -0.11522    -0.028152     0.054676      0.98244
