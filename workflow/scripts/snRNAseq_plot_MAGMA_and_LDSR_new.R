@@ -165,6 +165,7 @@ PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
             axis.text.x  = element_text(colour = "#000000", size = 10, vjust = 0.5),
             axis.text.y  = element_text(colour = "#000000", size = 7),
             legend.title = element_blank(),
+            strip.text = element_text(size=12, face = 'bold'),
             legend.position = "top") +
       xlab(expression(-log[10](P))) +
       ylab('Cell type') +

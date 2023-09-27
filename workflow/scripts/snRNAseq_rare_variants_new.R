@@ -169,7 +169,7 @@ WILCOXON_PLOT <- ggplot(data = wilcoxon_df, aes(x = -log10(P), y = factor(Catego
             legend.position = "none") +
       xlab(expression(-log[10](P))) +
       ylab('Cell type') +
-      xlim(0, 5)
+      xlim(0, 4)
 
 
 } else {
@@ -199,10 +199,11 @@ WILCOXON_PLOT <- ggplot(data = PLOT_DF, aes(x = -log10(P), y = factor(Category, 
             axis.title.y = element_text(colour = "#000000", size = 12),
             axis.text.x  = element_text(colour = "#000000", size = 10, vjust = 0.5),
             axis.text.y  = element_text(colour = "#000000", size = 7),
+            strip.text = element_text(size=12, face = 'bold'),
             legend.position = "none") +
       xlab(expression(-log[10](P))) +
       ylab('Cell type') +
-      xlim(0, 5) +
+      xlim(0, 4) +
       facet_wrap(~cell_type, scales = "free")
       
 }
@@ -211,7 +212,7 @@ WILCOXON_PLOT <- ggplot(data = PLOT_DF, aes(x = -log10(P), y = factor(Category, 
 
 cat('\nSave plots ... \n')
 
- jpeg(file = paste0(fig_dir, 'wilcoxon_', study_id, end, '_plot.jpeg'), units = "in", width = WIDTH, height = 11, res = 300)
+ jpeg(file = paste0(fig_dir, 'wilcoxon_', study_id, end, '_plot.jpeg'), units = "in", width = WIDTH, height = 10, res = 300)
  plot(WILCOXON_PLOT)
  dev.off()
 
