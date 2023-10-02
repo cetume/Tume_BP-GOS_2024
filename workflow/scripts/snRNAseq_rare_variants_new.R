@@ -175,14 +175,15 @@ WILCOXON_PLOT <- ggplot(data = wilcoxon_df, aes(x = -log10(P), y = factor(Catego
 } else {
 
 BF_CORR <- 0.05/84
-WIDTH <- 11
+WIDTH <- 13
 
 PLOT_DF <- wilcoxon_df %>%
-                         mutate(cell_type = case_when(Category %in% c("CCK_RELN", "CCK_SORCS1", "CCK_SYT6", "CGE_dev", "ID2_CSMD1", "ID2_dev", "LAMP5_CCK", "LAMP5_NDNF", "LAMP5_NOS1", "MGE_dev-1", "MGE_dev-2", "PV_dev", "PV_SCUBE3", "PV_SCUBE3_dev", "PV_SST", "PV_SULF1", "PV_SULF1_dev", "PV_WFDC2", "SST_ADGRG6", "SST_ADGRG6_dev", "SST_B3GAT2", "SST_BRINP3", "SST_CALB1", "SST_CALB1_dev", "SST_NPY", "SST_STK32A", "SST_TH", "VIP_ABI3BP", "VIP_ADAMTSL1", "VIP_CHRM2", "VIP_CRH", "VIP_dev", "VIP_DPP6", "VIP_HS3ST3A1", "VIP_KIRREL3", "VIP_PCDH20") ~ "Inhibitory Neurons",
-                               Category %in% c("L2_CUX2_LAMP5", "L3_CUX2_PRSS12", "L4_RORB_LRRK1", "L4_RORB_MET", "L4_RORB_MME", "L5-6_THEMIS_CNR1", "L5-6_THEMIS_NTNG2", "L5-6_TLE4_HTR2C", "L5-6_TLE4_SCUBE1", "L5-6_TLE4_SORCS1", "BKGR_NRGN") ~ "Excitatory Neurons",
-                               Category %in% c("L2-3_CUX2_dev-1", "L2-3_CUX2_dev-2", "L2-3_CUX2_dev-3", "L2-3_CUX2_dev-4", "L2-3_CUX2_dev-5", "L2-3_CUX2_dev-6", "L2-3_CUX2_dev-fetal", "L2_CUX2_LAMP5_dev", "L4_RORB_dev-1", "L4_RORB_dev-2", "L4_RORB_dev-fetal", "L5-6_THEMIS_dev-1", "L5-6_THEMIS_dev-2", "L5-6_TLE4_dev", "PN_dev") ~ "Immature Excitatory Neurons",
+  mutate(cell_type = case_when(Category %in% c("CCK_RELN", "CCK_SORCS1", "CCK_SYT6", "ID2_CSMD1", "LAMP5_CCK", "LAMP5_NDNF", "LAMP5_NOS1", "PV_SCUBE3", "PV_SST", "PV_SULF1", "PV_WFDC2", "SST_ADGRG6", "SST_B3GAT2", "SST_BRINP3", "SST_CALB1", "SST_NPY", "SST_STK32A", "SST_TH", "VIP_ABI3BP", "VIP_ADAMTSL1", "VIP_CHRM2", "VIP_CRH", "VIP_DPP6", "VIP_HS3ST3A1", "VIP_KIRREL3", "VIP_PCDH20") ~ "Inhibitory Neurons",
+                               Category %in% c("CGE_dev", "ID2_dev", "MGE_dev-1", "MGE_dev-2", "PV_dev", "PV_SCUBE3_dev", "PV_SULF1_dev", "SST_ADGRG6_dev", "SST_CALB1_dev", "VIP_dev") ~ "Developmental Inhibitory Neurons",
+                               Category %in% c("BKGR_NRGN", "L2_CUX2_LAMP5", "L3_CUX2_PRSS12", "L4_RORB_LRRK1", "L4_RORB_MET", "L4_RORB_MME", "L5-6_THEMIS_CNR1", "L5-6_THEMIS_NTNG2", "L5-6_TLE4_HTR2C", "L5-6_TLE4_SCUBE1", "L5-6_TLE4_SORCS1") ~ "Excitatory Neurons",
+                               Category %in% c("L2-3_CUX2_dev-1", "L2-3_CUX2_dev-2", "L2-3_CUX2_dev-3", "L2-3_CUX2_dev-4", "L2-3_CUX2_dev-5", "L2-3_CUX2_dev-6", "L2-3_CUX2_dev-fetal", "L2_CUX2_LAMP5_dev", "L4_RORB_dev-1", "L4_RORB_dev-2", "L4_RORB_dev-fetal", "L5-6_THEMIS_dev-1", "L5-6_THEMIS_dev-2", "L5-6_TLE4_dev", "PN_dev") ~ "Developmental Excitatory Neurons",
                                Category %in% c("Astro_dev-1", "Astro_dev-2", "Astro_dev-3", "Astro_dev-4", "Astro_dev-5", "Astro_GFAP", "Astro_SLC1A2", "Astro_SLC1A2_dev", "Micro", "Micro_out", "Oligo-1", "Oligo-2", "Oligo-3", "Oligo-4", "Oligo-5", "Oligo_mat", "OPC", "OPC_dev", "OPC_MBP", "Vas_CLDN5", "Vas_PDGFRB", "Vas_TBX18") ~ "Non-Neuronal")) %>%
-                         mutate(cell_type=factor(cell_type, levels = c("Excitatory Neurons", "Immature Excitatory Neurons", "Inhibitory Neurons", "Non-Neuronal")))
+  mutate(cell_type=factor(cell_type, levels = c("Excitatory Neurons", "Developmental Excitatory Neurons", "Inhibitory Neurons", "Developmental Inhibitory Neurons", "Non-Neuronal")))
  
 WILCOXON_PLOT <- ggplot(data = PLOT_DF, aes(x = -log10(P), y = factor(Category, rev(levels(factor(Category)))))) +
       geom_bar(stat = "identity", color = 'black', fill = 'darkseagreen') +
@@ -195,16 +196,16 @@ WILCOXON_PLOT <- ggplot(data = PLOT_DF, aes(x = -log10(P), y = factor(Category, 
             panel.grid.minor = element_blank(),
             panel.border = element_rect(colour = "black", size = 1),
             plot.title = element_text(hjust = 0.5, face = 'bold'),
-            axis.title.x = element_text(colour = "#000000", size = 12),
-            axis.title.y = element_text(colour = "#000000", size = 12),
-            axis.text.x  = element_text(colour = "#000000", size = 10, vjust = 0.5),
-            axis.text.y  = element_text(colour = "#000000", size = 7),
-            strip.text = element_text(size=12, face = 'bold'),
+            axis.title.x = element_text(colour = "#000000", size = 15),
+            axis.title.y = element_text(colour = "#000000", size = 15),
+            axis.text.x  = element_text(colour = "#000000", size = 12, vjust = 0.5),
+            axis.text.y  = element_text(colour = "#000000", size = 12),
+            strip.text = element_text(size=14, face = 'bold'),
             legend.position = "none") +
       xlab(expression(-log[10](P))) +
       ylab('Cell type') +
       xlim(0, 4) +
-      facet_wrap(~cell_type, scales = "free")
+      facet_wrap(~cell_type, scales = "free", ncol = 2)
       
 }
       
@@ -212,7 +213,7 @@ WILCOXON_PLOT <- ggplot(data = PLOT_DF, aes(x = -log10(P), y = factor(Category, 
 
 cat('\nSave plots ... \n')
 
- jpeg(file = paste0(fig_dir, 'wilcoxon_', study_id, end, '_plot.jpeg'), units = "in", width = WIDTH, height = 10, res = 300)
+ jpeg(file = paste0(fig_dir, 'wilcoxon_', study_id, end, '_plot.jpeg'), units = "in", width = WIDTH, height = 15.5, res = 300)
  plot(WILCOXON_PLOT)
  dev.off()
 
