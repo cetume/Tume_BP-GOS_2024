@@ -23,6 +23,9 @@ results/magma/dwnSmpl_2/*.log
 results/magma/dwnSmpl_3/*.gsa.sets.genes.out
 results/magma/dwnSmpl_3/*.gsa.genes.out
 results/magma/dwnSmpl_3/*.log
+results/magma/dwnSmpl_1/lvl1/*
+results/magma/dwnSmpl_2/lvl1/*
+results/magma/dwnSmpl_3/lvl1/*
 results/magma/lvl1/*
 results/magma/top1000/*
 results/GWAS_for_ldsc/*
@@ -32,7 +35,7 @@ results/rare_variants/Including_0/
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/*.results
-results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*
+results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/dwnSmpl_1/*.log
@@ -60,8 +63,9 @@ results/R_objects/*
 results/gene_lists/prep_*
 results/gene_lists/lvl1/*
 results/gene_lists/herring/LDSR_protein_coding/lvl1/*
-results/gene_lists/herring/LDSR_top1000_genes/*
+results/gene_lists/herring/LDSR_top1000_genes/
 results/gene_lists/herring/LDSR_top2000/lvl1/*
+results/gene_lists/herring/LDSR/lvl1/*
 results/gene_lists/herring/MAGMA/lvl1/*
 results/gene_lists/herring/MAGMA/herring_top1000_lvl2.txt
 results/gene_lists/herring_dwnSmpl/LDSR/dwnSmpl_1/lvl1/*
@@ -70,6 +74,6 @@ results/gene_lists/herring_dwnSmpl/LDSR/dwnSmpl_3/lvl1/*
 results/gene_lists/herring_dwnSmpl/MAGMA/dwnSmpl_1/lvl1/*
 results/gene_lists/herring_dwnSmpl/MAGMA/dwnSmpl_2/lvl1/*
 results/gene_lists/herring_dwnSmpl/MAGMA/dwnSmpl_3/lvl1/*
-results/figures/*
+results/figures/
 results/ctd_objects/*
-results/rare_variants/*
+results/rare_variants/
