@@ -1,23 +1,4 @@
 CELL_TYPE:
-    Astro.lvl1.100UP_100DOWN:
-    CGE_dev.lvl1.100UP_100DOWN:
-    ID2.lvl1.100UP_100DOWN:
-    L2-3_CUX2.lvl1.100UP_100DOWN:
-    L4_RORB.lvl1.100UP_100DOWN:
-    L5-6_THEMIS.lvl1.100UP_100DOWN:
-    L5-6_TLE4.lvl1.100UP_100DOWN:
-    LAMP5_NOS1.lvl1.100UP_100DOWN:
-    MGE_dev.lvl1.100UP_100DOWN:
-    Micro.lvl1.100UP_100DOWN:
-    Oligo.lvl1.100UP_100DOWN:
-    OPC.lvl1.100UP_100DOWN:
-    PN_dev.lvl1.100UP_100DOWN:
-    Poor-Quality.lvl1.100UP_100DOWN:
-    PV.lvl1.100UP_100DOWN:
-    PV_SCUBE3.lvl1.100UP_100DOWN:
-    SST.lvl1.100UP_100DOWN:
-    Vas.lvl1.100UP_100DOWN:
-    VIP.lvl1.100UP_100DOWN:
     Astro_dev-1.lvl2.100UP_100DOWN:
     Astro_dev-2.lvl2.100UP_100DOWN:
     Astro_dev-3.lvl2.100UP_100DOWN:
@@ -108,10 +89,8 @@ GWAS:
     HEIGHT:
 
 LEVEL:
-    1:
     2:
 
 project:
     herring:
-#    herring_dwnSmpl_lvl1:
-#    herring_dwnSmpl_lvl2:
+    herring_dwnSmpl_lvl2:
