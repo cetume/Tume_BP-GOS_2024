@@ -34,7 +34,7 @@ results/GWAS_for_MAGMA/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/*.results
-results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/
+results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/dwnSmpl_1/*.log
