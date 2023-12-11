@@ -6,6 +6,18 @@ results/00LOG/*
 results/LDSR_annotation_files/*
 config/profile/*
 results/logs/*
+results/gene_lists/herring/LDSR/classic_MHC/*
+results/gene_lists/herring/LDSR_protein_coding/classic_MHC/*
+results/gene_lists/herring/LDSR_top2000/classic_MHC/*
+results/gene_lists/herring/MAGMA/classic_MHC/*
+results/magma/classic_MHC/*.magma.genes.out
+results/magma/classic_MHC/*.gsa.sets.genes.out
+results/magma/classic_MHC/*.genes.raw
+results/magma/classic_MHC/*.log
+results/magma/classic_MHC/*.genes.out
+results/magma/classic_MHC/*.log.suppl
+results/magma/classic_MHC/*.gsa.genes.out
+results/magma/classic_MHC/*.genes.annot
 results/magma/*.magma.genes.out
 results/magma/*.gsa.sets.genes.out
 results/magma/*.genes.raw
@@ -32,6 +44,8 @@ results/GWAS_for_ldsc/*
 results/GWAS_for_MAGMA/*
 #results/LDSR_part_herit/baseline_v1.2/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
+results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*.log
+results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*.results
 results/LDSR_part_herit/baseline_v1.2/herring/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/*.results
 results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*
@@ -57,7 +71,6 @@ resources/sheets/*
 !resources/sheets/celltypes.tsv
 workflow/rules/old/*
 workflow/envs/*
-workflow/scripts/snRNAseq_rm_MHC_from_ref.R
 results/R_objects/*
 results/gene_lists/prep_*
 results/gene_lists/lvl1/*

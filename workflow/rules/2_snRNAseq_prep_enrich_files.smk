@@ -28,8 +28,7 @@ rule prep_enrichment_files:
     singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
     params: ctd_outdir = "../results/ctd_objects/",
             outdir = "../results/gene_lists/",
-            study_id = "{project}",
-            level = "{LEVEL}"
+            study_id = "{project}"
     threads: 10
     log:    "../results/00LOG/prep_enrich_files/snRNAseq_prep_enrichment_files_{project}.log"
     script:

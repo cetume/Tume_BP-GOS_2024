@@ -67,7 +67,7 @@ MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(Category, re
   geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
   geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
   theme_bw() +
-  ggtitle(GWAS) +
+  #ggtitle(GWAS) +
   theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -211,6 +211,15 @@ PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
 
 legend <- get_legend(SCZ_magma_ldsr_herring_lvl2_plot)
 
+
+#Title plots
+SCZ_magma_ldsr_herring_lvl2_plot <- SCZ_magma_ldsr_herring_lvl2_plot + ggtitle("Schizophrenia")
+HEIGHT_magma_ldsr_herring_lvl2_plot <- HEIGHT_magma_ldsr_herring_lvl2_plot + ggtitle("Height")
+SCZ_magma_ldsr_herring_protein_coding_lvl2_plot <- SCZ_magma_ldsr_herring_protein_coding_lvl2_plot + ggtitle("Schizophrenia")
+HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot <- HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot + ggtitle("Height")
+SCZ_magma_ldsr_herring_top2000_lvl2_plot <- SCZ_magma_ldsr_herring_top2000_lvl2_plot + ggtitle("Top 2000 Genes")
+
+#Combine plots
 herring_plot <- plot_grid(SCZ_magma_ldsr_herring_lvl2_plot + NoLegend(),
                         HEIGHT_magma_ldsr_herring_lvl2_plot + NoLegend(),
                       legend, ncol = 3, rel_widths = c(1, 1, 0.25),
@@ -226,6 +235,7 @@ herring_top2000_dwnSmpl_plot <- plot_grid(SCZ_magma_ldsr_herring_top2000_lvl2_pl
                       legend, ncol = 3, rel_widths = c(1, 1, 0.25),
                       labels = c('A', 'B', ''), label_size = 20)
 
+#Save plots
 jpeg(file = paste0(fig_dir,'SCZ_HEIGHT_magma_ldsr_herring_lvl2_plot.jpeg'), units = "in", width = 14, height = 20, res = 300)
 plot(herring_plot)
 dev.off()
