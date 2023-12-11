@@ -19,7 +19,6 @@ results/magma/classic_MHC/*.log.suppl
 results/magma/classic_MHC/*.gsa.genes.out
 results/magma/classic_MHC/*.genes.annot
 results/magma/*.magma.genes.out
-results/magma/*.gsa.sets.genes.out
 results/magma/*.genes.raw
 results/magma/*.log
 results/magma/*.genes.out
