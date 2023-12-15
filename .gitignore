@@ -18,6 +18,14 @@ results/magma/classic_MHC/*.genes.out
 results/magma/classic_MHC/*.log.suppl
 results/magma/classic_MHC/*.gsa.genes.out
 results/magma/classic_MHC/*.genes.annot
+results/magma_conditional/*.magma.genes.out
+results/magma_conditional/*gsa.sets.genes.out
+results/magma_conditional/*.genes.raw
+results/magma_conditional/*.log
+results/magma_conditional/*.genes.out
+results/magma_conditional/*.log.suppl
+results/magma_conditional/*.gsa.genes.out
+results/magma_conditional/*.genes.annot
 results/magma/*.magma.genes.out
 results/magma/*.genes.raw
 results/magma/*.log
@@ -45,6 +53,12 @@ results/GWAS_for_MAGMA/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*.results
+results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*.results
+results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/classic_MHC/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/classic_MHC/*.results
+results/LDSR_part_herit/baseline_v1.2/herring_cond_int/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_cond_int/*results
 results/LDSR_part_herit/baseline_v1.2/herring/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/*.results
 results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*
@@ -88,3 +102,5 @@ results/gene_lists/herring_dwnSmpl/MAGMA/dwnSmpl_3/lvl1/*
 results/figures/*
 results/ctd_objects/*
 results/rare_variants/*
+results/magma/snRNAseq_SCZ_PFC_only.herring.lvl2.magma.35UP_10DOWN.gsa.out
+results/magma/snRNAseq_HEIGHT_PFC_only.herring.lvl2.magma.35UP_10DOWN.gsa.out

@@ -92,5 +92,20 @@ LEVEL:
     2:
 
 project:
-    herring:
-#    herring_dwnSmpl_lvl2:
+#    herring:
+    herring_dwnSmpl_lvl2:
+
+CONDITION:
+    L4_RORB_LRRK1:
+    L4_RORB_dev-2:
+    L4_RORB_MET:
+
+COND_CELL_A:
+    L4_RORB_dev-2.lvl2.100UP_100DOWN:
+    L4_RORB_LRRK1.lvl2.100UP_100DOWN:
+    L4_RORB_MET.lvl2.100UP_100DOWN:
+
+COND_CELL_B:
+    L4_RORB_dev-2.lvl2.100UP_100DOWN:
+    L4_RORB_LRRK1.lvl2.100UP_100DOWN:
+    L4_RORB_MET.lvl2.100UP_100DOWN:

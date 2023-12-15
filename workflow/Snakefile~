@@ -1,0 +1,42 @@
+# -------------------------------------------------------------------------------------
+#
+#
+#    Script for running LDSC and MAGMA on snRNA-seq data
+#
+#
+# -------------------------------------------------------------------------------------
+
+# ---------  SET SMK PARAMS  ----------
+configfile: "../config/config.yaml"
+
+#include: "rules/9_snRNAseq_LDSR_top2000.smk"
+#include: "rules/8_snRNAseq_LDSR_dwnSmpl.smk"
+#include: "rules/7_snRNAseq_LDSR_protein_coding.smk"
+include: "rules/6_snRNAseq_LDSR_conditional_int.smk"
+#include: "rules/6_snRNAseq_LDSR.smk"
+#include: "rules/5_snRNAseq_MAGMA_protein_genes.smk"
+#include: "rules/4.5_snRNAseq_MAGMA_PFC_only.smk"
+#include: "rules/4_snRNAseq_MAGMA.smk"
+#include: "rules/3_snRNAseq_get_and_munge_GWAS.smk"
+#include: "rules/2_snRNAseq_prep_enrich_files.smk"
+#include: "rules/1_snRNAseq_get_and_prep_herring_data.smk"
+
+# -------------  RULES  ---------------
+rule all:
+    input:
+#        expand("../results/LDSR_part_herit/baseline_v1.2/herring_top2000/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_top2000 - rules9
+#        expand("../results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_dwnSmpl - rules8
+#        expand("../results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_protein_coding - rules7
+#        expand("../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring - rules6
+#        expand("../results/magma/snRNAseq_{GWAS}_PFC_only.herring.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring - rules4.5
+#        expand("../results/magma/snRNAseq_{GWAS}.herring_protein_coding.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_protein_coding - rules5
+#        expand("../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", CONDITION = config['CONDITION'], LEVEL = config['LEVEL']), #herring_conditional - rule4
+#        expand("../results/magma/snRNAseq_{GWAS}.herring_top2000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_top2000 - rules4
+#        expand("../results/magma/snRNAseq_{GWAS}.herring_dwnSmpl.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_dwnSmpl - rules4
+#        expand("../results/magma/snRNAseq_{GWAS}.herring.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring - rules4
+#        expand("../results/GWAS_for_ldsc/{GWAS}_hg19_ldsc_ready.sumstats.gz", GWAS = config['GWAS']),#rules3
+#        "../results/GWAS_for_MAGMA/SCZ_hg19_magma_ready.tsv",#rules3
+#        expand("../results/gene_lists/prep_enrichment_file_only_{project}.done", project = config['project']),#rules2
+#        expand("../results/gene_lists/prep_enrichment_file_{project}.done", project = config['project']),#rules2
+#        "../results/R_objects/seurat_herring.rds",#rules1
+#        "../resources/raw_data/herring_2022/data_for_R/herring_counts_geneMeta.csv",#rules1

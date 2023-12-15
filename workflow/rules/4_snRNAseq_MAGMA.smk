@@ -81,3 +81,34 @@ rule magma_gene_set_analysis_top2000:
 
              """
 
+rule magma_conditional:
+    input:   gene_list = "../results/gene_lists/herring/MAGMA/herring_lvl{LEVEL}.txt",
+             scz_magma = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw" 
+    output:  "../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
+    params:  "../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN"
+    message: "Running MAGMA on all significant cell types conditioning on {wildcards.CONDITION}, lvl{wildcards.LEVEL}"
+    log:     "../results/logs/magma/magma_conditional/snRNAseq.magma.conditional.{CONDITION}.lvl{LEVEL}.log"
+    shell:
+             """
+
+             module load magma/1.10
+             magma --gene-results {input.scz_magma} --set-annot {input.gene_list} --model condition={wildcards.CONDITION} --out {params} &> {log}
+
+             """
+
+rule magma_gene_set_analysis_GO:
+    input:   genes = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw",
+             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_magma.txt"
+    output:  "../results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out"
+    params:  out = "../results/magma/snRNAseq_{GWAS}.GO_term_genes.magma.35UP_10DOWN"
+    resources: slurm_extra = "--use-conda"
+    message: "Running magma gene set analysis step for SCZ, GO term genes"
+    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.SCZ.herring_GO_term_genes.35UP_10DOWN.log"
+    shell:
+             """
+
+             module load magma/1.10
+             magma --gene-results {input.genes} --set-annot {input.data} --out {params.out} &> {log}
+
+             """
+
