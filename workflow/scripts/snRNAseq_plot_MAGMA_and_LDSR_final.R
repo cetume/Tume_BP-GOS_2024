@@ -89,6 +89,46 @@ MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(Category, re
 
 assign(paste0(GWAS, '_magma_ldsr_', PROJECT, '_lvl', level, '_plot'), MAGMA_LDSR_PLOT, envir = .GlobalEnv)
 
+PLOT_mean <- PLOT_DF %>% pivot_wider(names_from = variable, values_from = value)
+PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'LDSR')])
+
+PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(BF_CORR), "Both",
+                                                  ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(0.05), "MAGMA  (LDSR P < 0.05)",
+                                                         ifelse(LDSR > -log10(BF_CORR) & MAGMA > -log10(0.05), "LDSR  (MAGMA P < 0.05)", "None"))))
+
+colour_table <- tibble(
+  COLOUR = c("Both", "MAGMA  (LDSR P < 0.05)", "LDSR  (MAGMA P < 0.05)", "None"),
+  Code = c("#00BA38", "yellow", "#00B0F6", "lightgrey")
+)
+
+PLOT_mean$COLOUR <- factor(PLOT_mean$COLOUR, levels = colour_table$COLOUR)
+
+MAGMA_LDSR_MEAN_PLOT <- ggplot(data = PLOT_mean, aes(x = mean, y = factor(Category, rev(levels(factor(Category)))), fill = COLOUR)) +
+  geom_bar(stat = "identity", color = 'black', position = "dodge") +
+  scale_fill_manual(values = colour_table$Code, drop = FALSE, name = "Significant") +
+  geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
+  geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
+  theme_bw() +
+  ggtitle(GWAS) +
+  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", size = 1),
+        plot.title = element_text(hjust = 0.5, face = 'bold'),
+        axis.title.x = element_text(colour = "#000000", size = 15),
+        axis.title.y = element_text(colour = "#000000", size = 15),
+        axis.text.x  = element_text(colour = "#000000", size = 12, vjust = 0.5),
+        axis.text.y  = element_text(colour = "#000000", size = 12),
+        title = element_text(colour = "#000000", size = 16),
+        legend.text = element_text(colour = "#000000", size = 14),
+        strip.text = element_text(size=14, face = 'bold')) +
+  xlab(expression(-log[10](P))) +
+  ylab('Cell type') +
+  xlim(0, 6) +
+  facet_col(facets = vars(cell_type), scales = "free", space = "free", strip.position = "top")
+
+assign(paste0(GWAS, '_magma_ldsr_mean_', PROJECT, '_lvl', level, '_plot'), MAGMA_LDSR_MEAN_PLOT, envir = .GlobalEnv)
+
 }
 }
 
@@ -207,36 +247,38 @@ PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
   assign(paste0('SCZ_magma_ldsr_herring_dwnSmpl_lvl', level, '_plot'), MAGMA_LDSR_PLOT, envir = .GlobalEnv)
 
 
+
+
 ##Save joint plots --------------------------------------------------------------------
 
-legend <- get_legend(SCZ_magma_ldsr_herring_lvl2_plot)
-
+legend <- get_legend(SCZ_magma_ldsr_mean_herring_lvl2_plot)
 
 #Title plots
-SCZ_magma_ldsr_herring_lvl2_plot <- SCZ_magma_ldsr_herring_lvl2_plot + ggtitle("Schizophrenia")
-HEIGHT_magma_ldsr_herring_lvl2_plot <- HEIGHT_magma_ldsr_herring_lvl2_plot + ggtitle("Height")
-SCZ_magma_ldsr_herring_protein_coding_lvl2_plot <- SCZ_magma_ldsr_herring_protein_coding_lvl2_plot + ggtitle("Schizophrenia")
-HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot <- HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot + ggtitle("Height")
-SCZ_magma_ldsr_herring_top2000_lvl2_plot <- SCZ_magma_ldsr_herring_top2000_lvl2_plot + ggtitle("Top 2000 Genes")
+SCZ_magma_ldsr_mean_herring_lvl2_plot <- SCZ_magma_ldsr_mean_herring_lvl2_plot + ggtitle("Schizophrenia") 
+HEIGHT_magma_ldsr_mean_herring_lvl2_plot <- HEIGHT_magma_ldsr_mean_herring_lvl2_plot + ggtitle("Height") 
+SCZ_magma_ldsr_mean_herring_protein_coding_lvl2_plot <- SCZ_magma_ldsr_mean_herring_protein_coding_lvl2_plot + ggtitle("Schizophrenia") 
+HEIGHT_magma_ldsr_mean_herring_protein_coding_lvl2_plot <- HEIGHT_magma_ldsr_mean_herring_protein_coding_lvl2_plot + ggtitle("Height") 
+SCZ_magma_ldsr_mean_herring_top2000_lvl2_plot <- SCZ_magma_ldsr_mean_herring_top2000_lvl2_plot + ggtitle("Top 2000 Genes")
+
 
 #Combine plots
-herring_plot <- plot_grid(SCZ_magma_ldsr_herring_lvl2_plot + NoLegend(),
-                        HEIGHT_magma_ldsr_herring_lvl2_plot + NoLegend(),
-                      legend, ncol = 3, rel_widths = c(1, 1, 0.25),
+herring_plot <- plot_grid(SCZ_magma_ldsr_mean_herring_lvl2_plot + NoLegend(),
+                        HEIGHT_magma_ldsr_mean_herring_lvl2_plot + NoLegend(),
+                      legend, ncol = 3, rel_widths = c(1, 1, 0.45),
                       labels = c('A', 'B', ''), label_size = 20)
 
-herring_protein_coding_plot <- plot_grid(SCZ_magma_ldsr_herring_protein_coding_lvl2_plot + NoLegend(),
-                        HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot + NoLegend(),
-                      legend, ncol = 3, rel_widths = c(1, 1, 0.25),
+herring_protein_coding_plot <- plot_grid(SCZ_magma_ldsr_mean_herring_protein_coding_lvl2_plot + NoLegend(),
+                        HEIGHT_magma_ldsr_mean_herring_protein_coding_lvl2_plot + NoLegend(),
+                      legend, ncol = 3, rel_widths = c(1, 1, 0.45),
                       labels = c('A', 'B', ''), label_size = 20)
 
-herring_top2000_dwnSmpl_plot <- plot_grid(SCZ_magma_ldsr_herring_top2000_lvl2_plot + NoLegend(),
-                        SCZ_magma_ldsr_herring_dwnSmpl_lvl2_plot + NoLegend(),
-                      legend, ncol = 3, rel_widths = c(1, 1, 0.25),
+herring_top2000_dwnSmpl_plot <- plot_grid(SCZ_magma_ldsr_mean_herring_top2000_lvl2_plot + NoLegend(),
+                        SCZ_magma_ldsr_mean_herring_dwnSmpl_lvl2_plot + NoLegend(),
+                      legend, ncol = 3, rel_widths = c(1, 1, 0.45),
                       labels = c('A', 'B', ''), label_size = 20)
 
 #Save plots
-jpeg(file = paste0(fig_dir,'SCZ_HEIGHT_magma_ldsr_herring_lvl2_plot.jpeg'), units = "in", width = 14, height = 20, res = 300)
+jpeg(file = paste0(fig_dir,'SCZ_HEIGHT_magma_ldsr_mean_herring_lvl2_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
 plot(herring_plot)
 dev.off()
 
