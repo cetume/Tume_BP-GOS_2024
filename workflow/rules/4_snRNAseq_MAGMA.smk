@@ -100,7 +100,7 @@ rule magma_gene_set_analysis_GO:
     input:   genes = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw",
              data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_magma.txt"
     output:  "../results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.GO_term_genes.magma.35UP_10DOWN"
+    params:  out = "../results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN"
     resources: slurm_extra = "--use-conda"
     message: "Running magma gene set analysis step for SCZ, GO term genes"
     log:     "../results/logs/magma/snRNAseq.gene_set_analysis.SCZ.herring_GO_term_genes.35UP_10DOWN.log"
