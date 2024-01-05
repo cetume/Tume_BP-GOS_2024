@@ -16,6 +16,7 @@ library(R.utils)
 ## Set variables  ---------------------------------------------------------------------
 
 magma <- 'Herring_snRNAseq_2023/results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out')
+ldsr <- 'Herring_snRNAseq_2023/results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
 FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
 
 ## Load and prep data -----------------------------------------------------------------
@@ -26,22 +27,36 @@ FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
   mutate(MAGMA = -log10(as.numeric(P))) %>%
   dplyr::select(FULL_NAME, MAGMA) %>%
   dplyr::rename(Category = FULL_NAME) %>%
-  separate(Category, into=c('Category', 'GO_Term'), sep = '-', extra = "merge") %>%
-  separate(GO_Term, into=c('GO_code', 'GO_Term'), sep = '~', extra = "merge")
+  separate(Category, into=c('Category', 'GO_Term'), sep = '~', extra = "merge")
     
-    MAGMA_DF$GO_Term<-capitalize(MAGMA_DF$GO_Term)
+  MAGMA_DF$GO_Term<-capitalize(MAGMA_DF$GO_Term)
   
   MAGMA_DF <- MAGMA_DF %>%
-  mutate(GO_Term = gsub('_', ' ', GO_Term))
+    mutate(GO_Term = gsub('_', ' ', GO_Term))
   
-  levels <- c('Nervous system development', 
-              'Neuron development', 
+  LDSR_FULL_DF <- read_tsv(ldsr) %>%
+    mutate(LDSR = if_else(`Coefficient_z-score` > 0, -log10(pnorm(`Coefficient_z-score`, lower.tail = FALSE)), 0))
+  
+  LDSR_FULL_DF$Category <- sub("\\.", ":", LDSR_FULL_DF$Category)
+  
+  LDSR_FULL_DF <- LDSR_FULL_DF %>% filter(str_detect(Category, 'lvl2.100UP_100DOWN')) %>%
+    separate(Category, into=c('Category', 'Window'), sep = '\\.', extra = "merge") 
+
+  LDSR_DF <- LDSR_FULL_DF %>%
+    dplyr::select(Category, LDSR)
+
+  PLOT_DF <- left_join(MAGMA_DF, LDSR_DF, by = 'Category') %>% 
+    reshape2::melt() %>%
+    separate(Category, into=c('Category', 'GO_code'), sep = '-', extra = "merge")
+
+  levels <- c('Nervous system development',
+              'Neuron development',
               'Cell projection organization',
-              'System process', 
+              'System process',
               'Neurological system process',
               'G-protein coupled receptor signaling pathway',
-              'Metal ion transport', 
-              'Potassium ion transport', 
+              'Metal ion transport',
+              'Potassium ion transport',
               'Regulation of ion transport',
               'Regulation of ion transmembrane transport',
               'Regulation of transmembrane transport',
@@ -56,33 +71,74 @@ FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
               'Regulation of membrane potential', 
               'Detection of stimulus involved in sensory perception')
   
-## Creating plot ----------------------------------------------------------------------
+## Creating plots ---------------------------------------------------------------------
   
-  MAGMA_PLOT <- ggplot(data = MAGMA_DF, aes(x = MAGMA, y = factor(GO_Term, rev(levels)),
-                                            fill = '#F8766D')) +
-  geom_bar(stat = "identity", color = 'black', position = "dodge") +
-  #geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
-  geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
-  theme_bw() +
- # ggtitle(paste0('GO Terms')) +
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_rect(colour = "black", linewidth = 1),
-        plot.title = element_text(hjust = 0.5, face = 'bold'),
-        axis.title.x = element_text(colour = "#000000", size = 15),
-        axis.title.y = element_text(colour = "#000000", size = 15),
-        axis.text.x  = element_text(colour = "#000000", size = 12, vjust = 0.5),
-        axis.text.y  = element_text(colour = "#000000", size = 12),
-        legend.position = "none",
-        strip.text = element_text(size=14, face = 'bold')) +
-  xlab(expression(-log[10](P))) +
-  ylab('GO Terms') +
-  xlim(0, 13) +
+  BF_CORR <- 0.05/56
+
+  MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(GO_Term, rev(levels)),
+                                                fill = variable, group = rev(variable))) +
+    geom_bar(stat = "identity", color = 'black', position = "dodge") +
+    geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
+    #geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
+    theme_bw() +
+    #ggtitle(GWAS) +
+    theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_rect(colour = "black", size = 1),
+          plot.title = element_text(hjust = 0.5, face = 'bold'),
+          axis.title.x = element_text(colour = "#000000", size = 15),
+          axis.title.y = element_text(colour = "#000000", size = 15),
+          axis.text.x = element_text(colour = "#000000", size = 12, vjust = 0.5),
+          axis.text.y = element_text(colour = "#000000", size = 12),
+          legend.position = "none",
+          strip.text = element_text(size=14, face = 'bold')) +
+    xlab(expression(-log[10](P))) +
+    ylab('GO Terms') +
+    xlim(0, 13) +
+      facet_wrap('Category')
+
+  PLOT_mean <- PLOT_DF %>% pivot_wider(names_from = variable, values_from = value)
+  PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'LDSR')])
+  PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(BF_CORR), "Both", ""))
+  
+  colour_table <- tibble(
+    COLOUR = c("Both", ""),
+    Code = c("#00BA38", "lightgrey")
+  )
+
+  PLOT_mean$COLOUR <- factor(PLOT_mean$COLOUR, levels = colour_table$COLOUR)
+
+  MAGMA_LDSR_MEAN_PLOT <- ggplot(data = PLOT_mean, aes(x = mean, y = factor(GO_Term, rev(levels)), fill = COLOUR)) +
+    geom_bar(stat = "identity", color = 'black', position = "dodge") +
+    scale_fill_manual(values = colour_table$Code, drop = FALSE) +
+    geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
+    #geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
+    theme_bw() +
+    #ggtitle(GWAS) +
+    theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_rect(colour = "black", size = 1),
+          plot.title = element_text(hjust = 0.5, face = 'bold'),
+          axis.title.x = element_text(colour = "#000000", size = 15),
+          axis.title.y = element_text(colour = "#000000", size = 15),
+          axis.text.x = element_text(colour = "#000000", size = 12, vjust = 0.5),
+          axis.text.y = element_text(colour = "#000000", size = 12),
+          title = element_text(colour = "#000000", size = 16),
+          legend.position = "none",
+          strip.text = element_text(size=14, face = 'bold')) +
+    xlab(expression(Mean -log[10](P))) +
+    ylab('GO Terms') +
+    xlim(0, 13) +
     facet_wrap('Category')
+
+## Save plots --------------------------------------------------------------------------
+
+  jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 12, height = 8, res = 300)
+  plot(MAGMA_LDSR_PLOT)
+  dev.off()
   
-## Save plot --------------------------------------------------------------------------
-  
-  jpeg(file = paste0(FIG_DIR,'SCZ_magma_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 12, height = 8, res = 300)
-  plot(MAGMA_PLOT)
+  jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_mean_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 12, height = 8, res = 300)
+  plot(MAGMA_LDSR_MEAN_PLOT)
   dev.off()

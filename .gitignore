@@ -87,6 +87,7 @@ resources/raw_data/*
 resources/refs/*
 resources/sheets/*
 !resources/sheets/celltypes.tsv
+!resources/sheets/celltypes_goterms.tsv
 workflow/rules/old/*
 workflow/envs/*
 results/R_objects/*
