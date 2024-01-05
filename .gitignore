@@ -58,6 +58,8 @@ results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/classic_MHC/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/classic_MHC/*.results
+results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_cond_int/*.log
