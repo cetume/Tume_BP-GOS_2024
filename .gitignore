@@ -2,7 +2,7 @@ workflow/.snakemake/*
 workflow/.cache/
 workflow/rules/old/*
 workflow/scripts/old/*
-resources/go_terms/*
+resources/go_terms/old/*
 results/00LOG/*
 results/LDSR_annotation_files/*
 config/profile/*
