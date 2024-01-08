@@ -15,9 +15,9 @@ library(R.utils)
 
 ## Set variables  ---------------------------------------------------------------------
 
-magma <- 'Herring_snRNAseq_2023/results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out')
-ldsr <- 'Herring_snRNAseq_2023/results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
-FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
+magma <- 'Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out')
+ldsr <- 'Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
+FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
 
 ## Load and prep data -----------------------------------------------------------------
 
@@ -47,7 +47,8 @@ FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
 
   PLOT_DF <- left_join(MAGMA_DF, LDSR_DF, by = 'Category') %>% 
     reshape2::melt() %>%
-    separate(Category, into=c('Category', 'GO_code'), sep = '-', extra = "merge")
+    separate(Category, into=c('Category', 'GO_code'), sep = '-', extra = "merge") %>%
+    filter(GO_Term != 'Regulation of transmembrane transport' & GO_Term != 'Synaptic signaling')
 
   levels <- c('Nervous system development',
               'Neuron development',
@@ -58,11 +59,11 @@ FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
               'Metal ion transport',
               'Potassium ion transport',
               'Regulation of ion transport',
-              'Regulation of ion transmembrane transport',
+              #'Regulation of ion transmembrane transport',
               'Regulation of transmembrane transport',
               'Synapse organization',
               'Synapse assembly',
-              'Synaptic signaling',
+              #'Synaptic signaling',
               'Trans-synaptic signaling',
               'Cell-cell signaling',
               'Regulation of synapse structure or activity',
@@ -124,13 +125,14 @@ FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
           axis.title.x = element_text(colour = "#000000", size = 15),
           axis.title.y = element_text(colour = "#000000", size = 15),
           axis.text.x = element_text(colour = "#000000", size = 12, vjust = 0.5),
-          axis.text.y = element_text(colour = "#000000", size = 12),
+          axis.text.y = element_text(colour = "#000000", size = 14),
           title = element_text(colour = "#000000", size = 16),
-          legend.position = "none",
+          legend.text = element_text(colour = "#000000", size = 14),
+          legend.position = "right",
           strip.text = element_text(size=14, face = 'bold')) +
     xlab(expression(Mean -log[10](P))) +
     ylab('GO Terms') +
-    xlim(0, 13) +
+    xlim(0, 8.5) +
     facet_wrap('Category')
 
 ## Save plots --------------------------------------------------------------------------
@@ -139,6 +141,6 @@ FIG_DIR <- 'Herring_snRNAseq_2023/results/figures/'
   plot(MAGMA_LDSR_PLOT)
   dev.off()
   
-  jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_mean_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 12, height = 8, res = 300)
+  jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_mean_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 15, height = 8, res = 300)
   plot(MAGMA_LDSR_MEAN_PLOT)
   dev.off()
