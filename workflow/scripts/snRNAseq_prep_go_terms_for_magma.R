@@ -16,7 +16,9 @@ library(tidyr)
 ## Set variables  ---------------------------------------------------------------------
 
 SIG_CELLS <- c('L4_RORB_LRRK1', 'L4_RORB_dev-2', 'L4_RORB_MET')
-DATA_DIR <- 'Herring_snRNAseq_2023/results/magma/'
+GO_TERMS_DIR <- 'Herring_snRNAseq_2023_pipeline/resources/go_terms/'
+DATA_DIR <- 'Herring_snRNAseq_2023_pipeline/results/gene_lists/herring/'
+gene_coord <- 'Herring_snRNAseq_2023_pipeline/results/R_objects/Ensembl_hg19_gene_coords_noMHC.rds'
 
 ## Create enrichment files for MAGMA --------------------------------------------------
 
@@ -24,9 +26,7 @@ for (CELL_TYPE in SIG_CELLS) {
   
 CELL_TYPE_EDIT <- gsub("-", "_", CELL_TYPE)
 
-GO_DATA <- paste0('~/Documents/GO_terms_', CELL_TYPE, '.csv')
-
-GO_TERMS <- read.csv(GO_DATA) %>% filter(Term == 'GO:0099537~trans-synaptic signaling' |
+GO_TERMS <- read.csv(paste0(GO_TERMS_DIR, 'GO_terms_', CELL_TYPE, '.csv')) %>% filter(Term == 'GO:0099537~trans-synaptic signaling' |
                             Term == 'GO:0050804~modulation of synaptic transmission' |
                             Term == 'GO:0007267~cell-cell signaling' |
                             Term == 'GO:0043269~regulation of ion transport' |
@@ -69,7 +69,7 @@ for (i in 1:ncol(GO_TERMS_FILT)) {
     
     GENE_LIST <- paste0(CELL_TYPE_EDIT, '-', TERM, ' ', paste(GENES, collapse = ' '))
     cat('\n\n', GENE_LIST, '\n')
-    cat(GENE_LIST, '\n', file = paste0(DATA_DIR, 'GO_term_genes_for_magma.txt'), 
+    cat(GENE_LIST, '\n', file = paste0(DATA_DIR, 'MAGMA/GO_term_genes_for_magma.txt'), 
         append = TRUE)
     
   } else {
@@ -78,11 +78,27 @@ for (i in 1:ncol(GO_TERMS_FILT)) {
     
     GENE_LIST <- paste0(CELL_TYPE_EDIT, '-', TERM, ' ', paste(GENES, collapse = ' '))
     cat('\n', GENE_LIST, '\n')
-    cat(GENE_LIST, '\n', file = paste0(DATA_DIR, 'GO_term_genes_for_magma.txt'))
+    cat(GENE_LIST, '\n', file = paste0(DATA_DIR, 'MAGMA/GO_term_genes_for_magma.txt'))
     
   }
   
 }
 
+GO_TERMS_2 <- GO_TERMS %>%
+  mutate(Term = paste0(CELL_TYPE_EDIT, '-', Term)) %>%
+  separate_rows(Genes, convert = TRUE) %>%
+  dplyr::select(Term, Genes) colnames(GO_TERMS_2) <- c("cell_type", "ensembl")
+
+gene_coordinates <- readRDS(gene_coord)
+  
+GO_TERMS_2 <- GO_TERMS_2 %>%
+  inner_join(gene_coordinates) %>%
+  mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+  dplyr::select(chr, start, end, ensembl, cell_type) %>%
+  group_by(cell_type)
+  
+  GO_TERMS_2$cell_type <- gsub(":", ".", GO_TERMS_2$cell_type)
+  GO_TERMS_2$cell_type <- gsub("~.*", "", GO_TERMS_2$cell_type)
+  GO_TERMS_2 %>% group_walk(~ write_tsv(.x[,1:4], paste0(DATA_DIR, 'LDSR_GO_term_genes/',
+                                          .y$cell_type, '.lvl2.100UP_100DOWN.bed'), col_names = FALSE))
 }
- 
