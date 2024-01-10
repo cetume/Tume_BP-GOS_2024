@@ -1,0 +1,16 @@
+# TOTAL_GENES = 51176
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar), one-sided, positive (set x set), two-sided (set x cov)
+# CONDITIONED_INTERNAL = gene size, gene density, inverse mac, log(gene size), log(gene density), log(inverse mac)
+VARIABLE                             TYPE  MODEL  TERM  NGENES         BETA     BETA_STD           SE            P FULL_NAME
+GO:0007399                            SET      1     A    2457      0.13696     0.029281     0.024315   8.9338e-09 GO:0007399
+L4_RORB_LRRK1                         SET      1     B    2314     0.063563     0.013207     0.024661    0.0049783 L4_RORB_LRRK1
+INTERACT::GO:0007399::L4_ROR...  INTER-SS      1   A*B     251      0.28578     0.019965     0.076281   8.9825e-05 INTERACT::GO:0007399::L4_RORB_LRRK1
+GO:0042391                            SET      2     A     432      0.18499     0.016925     0.057382   0.00063297 GO:0042391
+L4_RORB_LRRK1                         SET      2     B    2314      0.08913      0.01852     0.023745    8.726e-05 L4_RORB_LRRK1
+INTERACT::GO:0042391::L4_ROR...  INTER-SS      2   A*B      74      0.29944     0.011379      0.14235      0.01771 INTERACT::GO:0042391::L4_RORB_LRRK1
+GO:0043269                            SET      3     A     709      0.10723     0.012534     0.045777      0.00958 GO:0043269
+L4_RORB_LRRK1                         SET      3     B    2314     0.085683     0.017803     0.024045   0.00018322 L4_RORB_LRRK1
+INTERACT::GO:0043269::L4_ROR...  INTER-SS      3   A*B     117      0.22115     0.010562       0.1108      0.02297 INTERACT::GO:0043269::L4_RORB_LRRK1
+GO:0099537                            SET      4     A     683      0.18471     0.021196     0.047077    4.372e-05 GO:0099537
+L4_RORB_LRRK1                         SET      4     B    2314      0.07933     0.016483     0.024084   0.00049459 L4_RORB_LRRK1
+INTERACT::GO:0099537::L4_ROR...  INTER-SS      4   A*B     138       0.2509     0.013012      0.10697    0.0095007 INTERACT::GO:0099537::L4_RORB_LRRK1
