@@ -128,3 +128,20 @@ rule magma_GO_interactions:
              magma --gene-results {input.genes} --set-annot {input.data} --model interaction={input.interaction_list} interaction-ss-size=25,0.03 --out {params.out} &> {log}
 
              """
+
+rule magma_GO_LRRK1:
+    input:   genes = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw",
+             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_test.txt",
+    output:  "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out"
+    params:  out = "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN"
+    resources: slurm_extra = "--use-conda"
+    message: "Running magma gene set analysis step for SCZ, GO term genes interactions"
+    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.SCZ.herring_GO_term_genes_inter.35UP_10DOWN.log"
+    shell:
+             """
+
+             module load magma/1.10
+             magma --gene-results {input.genes} --set-annot {input.data} --out {params.out} &> {log}
+
+             """
+
