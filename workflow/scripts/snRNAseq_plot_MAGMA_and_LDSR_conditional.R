@@ -19,7 +19,7 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
 BF_CORR <- 0.05/84
 GWAS <- 'SCZ'
 
-## 
+## Load and prepare MAGMA data --------------------------------------------------------
 cat('\nPreparing MAGMA data ... \n')
 
 magma_dev <- 'Herring_snRNAseq_2023_pipeline/results/magma_conditional/snRNAseq.herring_all_sig_condition_L4_RORB_dev-2.lvl2.magma.35UP_10DOWN.gsa.out'
@@ -58,10 +58,10 @@ MAGMA_DF_MET <- read.table(magma_MET, header = FALSE) %>%
 MAGMA_DF <- merge(MAGMA_DF_dev, MAGMA_DF_LRRK1, all = TRUE) %>%
   merge(MAGMA_DF_MET, all = TRUE) 
 
-##
+## Load and prepare LDSR data ---------------------------------------------------------
 cat('\nPreparing LDSR data ... \n')
 
-ldsr <- 'Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/herring_cond_int/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
+ldsr <- 'Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/herring_conditional/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
 
 LDSR_FULL_DF <- read_tsv(ldsr) %>%
   mutate(LDSR = if_else(`Coefficient_z-score` > 0, -log10(pnorm(`Coefficient_z-score`, lower.tail = FALSE)), 0)) %>%
@@ -74,7 +74,7 @@ LDSR_FULL_DF <- read_tsv(ldsr) %>%
 LDSR_DF <- LDSR_FULL_DF %>%
   dplyr::select(Category, LDSR)
 
-##
+## Plot data -------------------------------------------------------------------------
 
 PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
                      by = 'Category') %>% reshape2::melt() 
@@ -136,11 +136,11 @@ MAGMA_LDSR_MEAN_PLOT <- ggplot(data = PLOT_mean, aes(x = mean, y = factor(Catego
   ylab('Conditional analysis') +
   xlim(0, 4.5) 
 
-##
+## Save plots -------------------------------------------------------------------------
 
-jpeg(file = paste0(FIG_DIR, 'SCZ_magma_ldsr_herring_conditional_plot.jpeg'), units = "in", width = 11, height = 7, res = 300) 
-plot(MAGMA_LDSR_PLOT)
-dev.off() 
+#jpeg(file = paste0(FIG_DIR, 'SCZ_magma_ldsr_herring_conditional_plot.jpeg'), units = "in", width = 11, height = 7, res = 300) 
+#plot(MAGMA_LDSR_PLOT)
+#dev.off() 
 
 jpeg(file = paste0(FIG_DIR, 'SCZ_magma_ldsr_herring_mean_conditional_plot.jpeg'), units = "in", width = 11, height = 7, res = 300) 
 plot(MAGMA_LDSR_MEAN_PLOT)

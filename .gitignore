@@ -46,8 +46,8 @@ results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.results
-results/LDSR_part_herit/baseline_v1.2/herring_cond_int/*.log
-results/LDSR_part_herit/baseline_v1.2/herring_cond_int/*results
+results/LDSR_part_herit/baseline_v1.2/herring_conditional/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_conditional/*results
 results/LDSR_part_herit/baseline_v1.2/herring/*.log
 results/LDSR_part_herit/baseline_v1.2/herring/*.results
 results/LDSR_part_herit/baseline_v1.2/herring/top1000_genes/*
@@ -72,6 +72,7 @@ resources/refs/*
 resources/sheets/*
 !resources/sheets/celltypes.tsv
 !resources/sheets/celltypes_goterms.tsv
+!resources/sheets/celltypes_conditional.tsv
 !resources/sheets/interaction_list
 workflow/rules/old/*
 workflow/envs/*
