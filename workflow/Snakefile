@@ -24,7 +24,7 @@ include: "rules/4_snRNAseq_MAGMA.smk"
 # -------------  RULES  ---------------
 rule all:
     input:
-#        "../results/LDSR_part_herit/baseline_v1.2/herring_cond_int/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv", #herring_cond_int - rules11
+#        "../results/LDSR_part_herit/baseline_v1.2/herring_conditional/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv", #herring_conditional - rules11
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_GO_term_genes - rules10
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_top2000/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_top2000 - rules9
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_dwnSmpl - rules8
