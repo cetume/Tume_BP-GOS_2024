@@ -31,8 +31,8 @@ rule all:
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_protein_coding - rules7
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring - rules6
 #        expand("../results/magma/snRNAseq_{GWAS}.herring_protein_coding.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_protein_coding - rules5
-        "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out", 
-#        "../results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out", #herring_GO_term_genes_interactions - rules4         
+#        "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out", 
+        "../results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out", #herring_GO_term_genes_interactions - rules4         
 #        "../results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out", #herring_GO_term_genes - rules4
 #        expand("../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", CONDITION = config['CONDITION'], LEVEL = config['LEVEL']), #herring_conditional - rule4
 #        expand("../results/magma/snRNAseq_{GWAS}.herring_top2000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_top2000 - rules4
