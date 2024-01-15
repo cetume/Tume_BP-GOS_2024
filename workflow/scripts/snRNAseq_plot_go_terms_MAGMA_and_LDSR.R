@@ -59,8 +59,8 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
               'Metal ion transport',
               'Potassium ion transport',
               'Regulation of ion transport',
-              #'Regulation of ion transmembrane transport',
-              'Regulation of transmembrane transport',
+              'Regulation of ion transmembrane transport',
+              #'Regulation of transmembrane transport',
               'Synapse organization',
               'Synapse assembly',
               #'Synaptic signaling',
@@ -74,7 +74,7 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
   
 ## Creating plots ---------------------------------------------------------------------
   
-  BF_CORR <- 0.05/56
+  BF_CORR <- 0.05/50
 
   MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(GO_Term, rev(levels)),
                                                 fill = variable, group = rev(variable))) +
@@ -101,11 +101,13 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
 
   PLOT_mean <- PLOT_DF %>% pivot_wider(names_from = variable, values_from = value)
   PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'LDSR')])
-  PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(BF_CORR), "Both", ""))
+  PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(BF_CORR), "Both",
+                                             ifelse(MAGMA > -log10(BF_CORR), "MAGMA",
+                                             ifelse(LDSR > -log10(BF_CORR), "LDSR", "None"))))
   
   colour_table <- tibble(
-    COLOUR = c("Both", ""),
-    Code = c("#00BA38", "lightgrey")
+    COLOUR = c("Both", "MAGMA", "LDSR", "None"),
+    Code = c("#00BA38", "yellow", "#00B0F6", "lightgrey")
   )
 
   PLOT_mean$COLOUR <- factor(PLOT_mean$COLOUR, levels = colour_table$COLOUR)

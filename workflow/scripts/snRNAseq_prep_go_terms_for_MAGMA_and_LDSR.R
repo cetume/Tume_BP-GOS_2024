@@ -19,6 +19,7 @@ SIG_CELLS <- c('L4_RORB_LRRK1', 'L4_RORB_dev-2', 'L4_RORB_MET')
 GO_TERMS_DIR <- 'Herring_snRNAseq_2023_pipeline/resources/go_terms/'
 DATA_DIR <- 'Herring_snRNAseq_2023_pipeline/results/gene_lists/herring/'
 gene_coord <- 'Herring_snRNAseq_2023_pipeline/results/R_objects/Ensembl_hg19_gene_coords_noMHC.rds'
+gene_coordinates <- readRDS(gene_coord)
 
 ## Create enrichment files for MAGMA --------------------------------------------------
 
@@ -44,8 +45,8 @@ GO_TERMS <- read.csv(paste0(GO_TERMS_DIR, 'GO_terms_', CELL_TYPE, '.csv')) %>% f
                             Term == 'GO:0030030~cell projection organization' |
                             Term == 'GO:0050803~regulation of synapse structure or activity' |
                             Term == 'GO:0007416~synapse assembly' |
-                            Term == 'GO:0099536~synaptic signaling' |
-                            Term == 'GO:0034762~regulation of transmembrane transport' |
+                            #Term == 'GO:0099536~synaptic signaling' |
+                            #Term == 'GO:0034762~regulation of transmembrane transport' |
                             Term == 'GO:0050906~detection of stimulus involved in sensory perception') %>%
   filter(FDR <= 0.05) %>%
   mutate(Term = gsub(' ', '_', Term)) %>%
@@ -89,8 +90,6 @@ GO_TERMS_2 <- GO_TERMS %>%
   separate_rows(Genes, convert = TRUE) %>%
   dplyr::select(Term, Genes) colnames(GO_TERMS_2) <- c("cell_type", "ensembl")
 
-gene_coordinates <- readRDS(gene_coord)
-  
 GO_TERMS_2 <- GO_TERMS_2 %>%
   inner_join(gene_coordinates) %>%
   mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
