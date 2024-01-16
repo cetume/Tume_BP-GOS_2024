@@ -1,4 +1,4 @@
-# Cells of the Prefrontal Cortex Mediating Genetic Risk for Schizophrenia
+# Genetic Implication of Layer 4 Glutamatergic Neurons of the Prefrontal Cortex in the Pathophysiology of Schizophrenia
 
 This project was carried out in the Division of Psychological Medicine and Clinical Neurosciences (DPMCN). The workflow follows the the snakemake distribution and reproducibility recommendations.
 
