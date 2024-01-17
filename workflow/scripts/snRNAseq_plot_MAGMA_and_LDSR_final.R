@@ -16,8 +16,9 @@ library(ggforce)
 ## Set variables  ---------------------------------------------------------------------
 cat('\nPlotting MAGMA and SLDSR results ... \n')
 
-fig_dir <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
-TRAIT <- c('SCZ, 'HEIGHT')
+FIG_DIR <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/figures/'
+dir.create(paste0(FIG_DIR),  recursive = TRUE, showWarnings = FALSE)
+TRAIT <- c('SCZ', 'HEIGHT')
 PROJECTS <- c('herring', 'herring_protein_coding', 'herring_top2000', 'herring_dwnSmpl')
 level <- '2'
 BF_CORR <- 0.05/84
@@ -28,8 +29,8 @@ for(GWAS in TRAIT) {
 
 ## Load data - herring, herring_protein_coding, herring_top2000 -----------------------
 
-magma <- paste0('Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_', GWAS, '.', PROJECT, '.lvl', level, '.magma.35UP_10DOWN.gsa.out')
-ldsr <- paste0('Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/', PROJECT, '/snRNAseq_LDSR_', GWAS, '_baseline.v1.2_summary.tsv')
+magma <- paste0('~/Desktop/Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_', GWAS, '.', PROJECT, '.lvl', level, '.magma.35UP_10DOWN.gsa.out')
+ldsr <- paste0('~/Desktop/Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/', PROJECT, '/snRNAseq_LDSR_', GWAS, '_baseline.v1.2_summary.tsv')
 
 ##Preparing data ----------------------------------------------------------------------
 cat('\nPreparing data ... \n')
@@ -42,12 +43,12 @@ MAGMA_DF <- read.table(magma, header = FALSE) %>%
   dplyr::rename(Category = VARIABLE)
 
 LDSR_FULL_DF <- read_tsv(ldsr) %>%
-  mutate(LDSR = if_else(`Coefficient_z-score` > 0, -log10(pnorm(`Coefficient_z-score`, lower.tail = FALSE)), 0)) %>%
+  mutate(SLDSR = if_else(`Coefficient_z-score` > 0, -log10(pnorm(`Coefficient_z-score`, lower.tail = FALSE)), 0)) %>%
   filter(str_detect(Category, paste0('lvl', level, '.100UP_100DOWN'))) %>%
   separate(Category, into=c('Category', 'Window'), sep = '\\.', extra = "merge")
 
 LDSR_DF <- LDSR_FULL_DF %>%
-  dplyr::select(Category, LDSR)
+  dplyr::select(Category, SLDSR)
 
 ##Creating plots ----------------------------------------------------------------------
 
@@ -60,6 +61,7 @@ PLOT_DF <- left_join(MAGMA_DF, LDSR_DF,
                                Category %in% c("Astro_dev-1", "Astro_dev-2", "Astro_dev-3", "Astro_dev-4", "Astro_dev-5", "Astro_GFAP", "Astro_SLC1A2", "Astro_SLC1A2_dev", "Micro", "Micro_out", "Oligo-1", "Oligo-2", "Oligo-3", "Oligo-4", "Oligo-5", "Oligo_mat", "OPC", "OPC_dev", "OPC_MBP", "Vas_CLDN5", "Vas_PDGFRB", "Vas_TBX18") ~ "Non-Neuronal")) %>%
   mutate(cell_type=factor(cell_type, levels = c("Mature Excitatory Neurons", "Developing Excitatory Neurons", "Mature Inhibitory Neurons", "Developing Inhibitory Neurons", "Non-Neuronal")))
 
+PLOT_DF$Category <- gsub("_", "-", PLOT_DF$Category)
 
 MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(Category, rev(levels(factor(Category)))),
                                               fill = variable, group = rev(variable))) +
@@ -90,14 +92,14 @@ MAGMA_LDSR_PLOT <- ggplot(data = PLOT_DF, aes(x = value, y = factor(Category, re
 assign(paste0(GWAS, '_magma_ldsr_', PROJECT, '_lvl', level, '_plot'), MAGMA_LDSR_PLOT, envir = .GlobalEnv)
 
 PLOT_mean <- PLOT_DF %>% pivot_wider(names_from = variable, values_from = value)
-PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'LDSR')])
+PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'SLDSR')])
 
-PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(BF_CORR), "Both",
+PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & SLDSR > -log10(BF_CORR), "Both",
                                                   ifelse(MAGMA > -log10(BF_CORR), "MAGMA",
-                                                         ifelse(LDSR > -log10(BF_CORR), "LDSR", "None"))))
+                                                         ifelse(SLDSR > -log10(BF_CORR), "SLDSR", "None"))))
 
 colour_table <- tibble(
-  COLOUR = c("Both", "MAGMA", "LDSR", "None"),
+  COLOUR = c("Both", "MAGMA", "SLDSR", "None"),
   Code = c("#00BA38", "yellow", "#00B0F6", "lightgrey")
 )
 
@@ -162,14 +164,15 @@ herring_top2000_dwnSmpl_plot <- plot_grid(SCZ_magma_ldsr_mean_herring_top2000_lv
                       labels = c('A', 'B', ''), label_size = 20)
 
 #Save plots
-jpeg(file = paste0(fig_dir,'SCZ_HEIGHT_magma_ldsr_mean_herring_lvl2_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
+jpeg(file = paste0(FIG_DIR,'SCZ_HEIGHT_magma_ldsr_mean_herring_lvl2_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
 plot(herring_plot)
 dev.off()
 
-jpeg(file = paste0(fig_dir,'SCZ_HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
+jpeg(file = paste0(FIG_DIR,'SCZ_HEIGHT_magma_ldsr_herring_protein_coding_lvl2_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
 plot(herring_protein_coding_plot)
 dev.off()
 
-jpeg(file = paste0(fig_dir,'SCZ_HEIGHT_magma_ldsr_herring_top2000_dwnSmpl_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
+jpeg(file = paste0(FIG_DIR,'SCZ_HEIGHT_magma_ldsr_herring_top2000_dwnSmpl_plot.jpeg'), units = "in", width = 15, height = 20, res = 300)
 plot(herring_top2000_dwnSmpl_plot)
 dev.off()
+

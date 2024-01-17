@@ -6,6 +6,7 @@
 
 ##  Load Packages  --------------------------------------------------------------------
 
+library(tidyverse)
 library(dplyr)
 library(ggsignif)
 library(cowplot)
@@ -15,9 +16,10 @@ library(R.utils)
 
 ## Set variables  ---------------------------------------------------------------------
 
-magma <- 'Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out')
-ldsr <- 'Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
-FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
+magma <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out'
+ldsr <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv'
+FIG_DIR <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/figures/'
+dir.create(paste0(FIG_DIR),  recursive = TRUE, showWarnings = FALSE)
 
 ## Load and prep data -----------------------------------------------------------------
 
@@ -35,7 +37,7 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
     mutate(GO_Term = gsub('_', ' ', GO_Term))
   
   LDSR_FULL_DF <- read_tsv(ldsr) %>%
-    mutate(LDSR = if_else(`Coefficient_z-score` > 0, -log10(pnorm(`Coefficient_z-score`, lower.tail = FALSE)), 0))
+    mutate(SLDSR = if_else(`Coefficient_z-score` > 0, -log10(pnorm(`Coefficient_z-score`, lower.tail = FALSE)), 0))
   
   LDSR_FULL_DF$Category <- sub("\\.", ":", LDSR_FULL_DF$Category)
   
@@ -43,12 +45,14 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
     separate(Category, into=c('Category', 'Window'), sep = '\\.', extra = "merge") 
 
   LDSR_DF <- LDSR_FULL_DF %>%
-    dplyr::select(Category, LDSR)
+    dplyr::select(Category, SLDSR)
 
   PLOT_DF <- left_join(MAGMA_DF, LDSR_DF, by = 'Category') %>% 
     reshape2::melt() %>%
     separate(Category, into=c('Category', 'GO_code'), sep = '-', extra = "merge") %>%
     filter(GO_Term != 'Regulation of transmembrane transport' & GO_Term != 'Synaptic signaling')
+  
+  PLOT_DF$Category <- gsub("_", "-", PLOT_DF$Category)
 
   levels <- c('Nervous system development',
               'Neuron development',
@@ -92,7 +96,8 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
           axis.title.y = element_text(colour = "#000000", size = 15),
           axis.text.x = element_text(colour = "#000000", size = 12, vjust = 0.5),
           axis.text.y = element_text(colour = "#000000", size = 12),
-          legend.position = "none",
+          legend.position = "right",
+          legend.title = element_blank(), 
           strip.text = element_text(size=14, face = 'bold')) +
     xlab(expression(-log[10](P))) +
     ylab('GO Terms') +
@@ -100,13 +105,13 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
       facet_wrap('Category')
 
   PLOT_mean <- PLOT_DF %>% pivot_wider(names_from = variable, values_from = value)
-  PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'LDSR')])
-  PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & LDSR > -log10(BF_CORR), "Both",
+  PLOT_mean$mean <- rowMeans(PLOT_mean[,c('MAGMA', 'SLDSR')])
+  PLOT_mean <- PLOT_mean %>% mutate(COLOUR = ifelse(MAGMA > -log10(BF_CORR) & SLDSR > -log10(BF_CORR), "Both",
                                              ifelse(MAGMA > -log10(BF_CORR), "MAGMA",
-                                             ifelse(LDSR > -log10(BF_CORR), "LDSR", "None"))))
+                                             ifelse(SLDSR > -log10(BF_CORR), "SLDSR", "None"))))
   
   colour_table <- tibble(
-    COLOUR = c("Both", "MAGMA", "LDSR", "None"),
+    COLOUR = c("Both", "MAGMA", "SLDSR", "None"),
     Code = c("#00BA38", "yellow", "#00B0F6", "lightgrey")
   )
 
@@ -114,7 +119,8 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
 
   MAGMA_LDSR_MEAN_PLOT <- ggplot(data = PLOT_mean, aes(x = mean, y = factor(GO_Term, rev(levels)), fill = COLOUR)) +
     geom_bar(stat = "identity", color = 'black', position = "dodge") +
-    scale_fill_manual(values = colour_table$Code, drop = FALSE) +
+    scale_fill_manual(values = colour_table$Code, drop = FALSE, name = "Significant at 
+Bonferroni threshold") +
     geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
     #geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
     theme_bw() +
@@ -139,10 +145,11 @@ FIG_DIR <- 'Herring_snRNAseq_2023_pipeline/results/figures/'
 
 ## Save plots --------------------------------------------------------------------------
 
-  jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 12, height = 8, res = 300)
-  plot(MAGMA_LDSR_PLOT)
-  dev.off()
+  #jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 12, height = 8, res = 300)
+  #plot(MAGMA_LDSR_PLOT)
+  #dev.off()
   
   jpeg(file = paste0(FIG_DIR,'SCZ_magma_ldsr_mean_herring_GO_term_lvl2_plot.jpeg'), units = "in", width = 15, height = 8, res = 300)
   plot(MAGMA_LDSR_MEAN_PLOT)
   dev.off()
+
