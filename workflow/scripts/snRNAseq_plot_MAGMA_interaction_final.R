@@ -5,7 +5,6 @@
 #--------------------------------------------------------------------------------------
 
 ##  Load Packages  --------------------------------------------------------------------
-
 library(tidyverse)
 library(dplyr)
 library(ggsignif)
@@ -17,12 +16,13 @@ library(R.utils)
 
 ## Set variables  ---------------------------------------------------------------------
 
-FIG_DIR = 'Herring_snRNAseq_2023_pipeline/results/figures/'
+FIG_DIR <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/figures/'
+dir.create(paste0(FIG_DIR),  recursive = TRUE, showWarnings = FALSE)
 
 ## Load data  -------------------------------------------------------------------------
 
-interaction <- 'Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out'
-GO_LRRK1 <- 'Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out'
+interaction <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out'
+GO_LRRK1 <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out'
 
 ## Preparing data  --------------------------------------------------------------------
 
@@ -49,10 +49,8 @@ MAGMA_DF_LRRK1 <- read.table(GO_LRRK1, header = FALSE) %>%
 
 MAGMA_DF_inter <- read.table(interaction, header = FALSE) %>%
   janitor::row_to_names(row_number = 1) %>%
-  #mutate(FULL_NAME = gsub('\\.', '-', FULL_NAME)) %>%
   dplyr::select(FULL_NAME, MODEL, BETA, BETA_STD) %>%
   dplyr::rename(Category = FULL_NAME) %>%
-  #mutate(Category = paste0(Category, '_', MODEL)) %>%
   mutate(MODEL = ifelse(MODEL == '1', 'Nervous system development', 
                     ifelse(MODEL == '2', 'Regulation of membrane potential',
                     ifelse(MODEL == '3', 'Regulation of ion transport', 'Trans-synaptic signaling'))))
@@ -70,7 +68,9 @@ MAGMA_DF <- merge(MAGMA_DF_LRRK1, MAGMA_DF_inter, all = TRUE) %>% merge(MAGMA_DF
 MAGMA_DF$BETA <- as.numeric(as.character(MAGMA_DF$BETA))
 MAGMA_DF$BETA_STD <- as.numeric(as.character(MAGMA_DF$BETA_STD))
 
-levels <- c("L4_RORB_LRRK1", "L4_RORB_LRRK1_vs_GO Term", "GO Term", "GO Term_vs_L4_RORB_LRRK1", "Interaction")
+MAGMA_DF$Category <- gsub("_", "-", MAGMA_DF$Category)
+
+levels <- c("L4-RORB-LRRK1", "L4-RORB-LRRK1-vs-GO Term", "GO Term", "GO Term-vs-L4-RORB-LRRK1", "Interaction")
 
 ## Creating plots  --------------------------------------------------------------------
 
