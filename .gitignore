@@ -11,6 +11,7 @@ results/gene_lists/herring/LDSR/classic_MHC/*
 results/gene_lists/herring/LDSR_protein_coding/classic_MHC/*
 results/gene_lists/herring/LDSR_top2000/classic_MHC/*
 results/gene_lists/herring/MAGMA/classic_MHC/*
+results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_final.txt
 results/magma/classic_MHC/*
 results/magma_conditional/*.magma.genes.out
 results/magma_conditional/*gsa.sets.genes.out

@@ -114,7 +114,7 @@ rule magma_gene_set_analysis_GO:
 
 rule magma_GO_LRRK1_interactions:
     input:   genes = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw",
-             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma.txt",
+             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_all.txt",
              interaction_list = "../resources/sheets/interaction_list"
     output:  "../results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out"
     params:  out = "../results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN"
@@ -131,7 +131,7 @@ rule magma_GO_LRRK1_interactions:
 
 rule magma_gene_set_analysis_GO_LRRK1:
     input:   genes = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw",
-             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma.txt",
+             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_all.txt",
     output:  "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out"
     params:  out = "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN"
     resources: slurm_extra = "--use-conda"
