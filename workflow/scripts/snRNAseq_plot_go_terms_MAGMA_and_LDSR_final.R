@@ -84,9 +84,8 @@ dir.create(paste0(FIG_DIR),  recursive = TRUE, showWarnings = FALSE)
                                                 fill = variable, group = rev(variable))) +
     geom_bar(stat = "identity", color = 'black', position = "dodge") +
     geom_vline(xintercept=-log10(BF_CORR), linetype = "dashed", color = "black") +
-    #geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
+    geom_vline(xintercept=-log10(0.05), linetype = "dotted", color = "black") +
     theme_bw() +
-    #ggtitle(GWAS) +
     theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
