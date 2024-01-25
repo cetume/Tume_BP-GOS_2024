@@ -52,7 +52,7 @@ From: bioconductor/bioconductor_docker:devel
 ```
 
 #### Running the Snakemake Pipeline:
-The Snakemake file includes rules from 9 files. To run the entire pipeline, rules from files 1-3 must be run first before running rules from files 4-9, by blanking out the relevant lines in the Snakemake file using #.
+The Snakemake file includes rules from 11 files. To run the entire pipeline, rules from files 1-3 must be run first before running rules from files 4-9, by blanking out the relevant lines in the Snakemake file using #.
 
 By default, this pipeline will analyse 84 cell sub-cluster populations. 
 
