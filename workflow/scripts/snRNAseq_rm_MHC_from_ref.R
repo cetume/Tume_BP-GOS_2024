@@ -9,9 +9,12 @@ cat('\nRemove MHC genes from gene ref file ... \n')
 ref_in <- toString(snakemake@input)
 ref_noMHC <- toString(snakemake@params[['ref_noMHC']])
 protein_ref_noMHC <- toString(snakemake@params[['protein_ref_noMHC']])
+nonprotein_ref_noMHC <- toString(snakemake@params[['nonprotein_ref_noMHC']])
 gene_coord_rds <- toString(snakemake@output[['gene_coord']])
 mhc_genes_rds <- toString(snakemake@output[['mhc_genes']])
+xy_genes_rds <- toString(snakemake@output[['xy_genes']])
 protein_gene_coord_rds <- toString(snakemake@output[['protein_gene_coord']])
+nonprotein_gene_coord_rds <- toString(snakemake@output[['nonprotein_gene_coord']])
 
 ## Initialise R library  --------------------------------------------------------------
 R.Version()
@@ -30,6 +33,15 @@ mhc_genes <- getBM(attributes = c("external_gene_name", "chromosome_name", "star
                    mart = mart_hg19)
 mhc_genes_uniq <- stringi::stri_remove_empty(unique(mhc_genes$external_gene_name), na_empty = FALSE)
 cat('MHC genes:', length(mhc_genes_uniq), '\n')
+
+# Get non-autosomal genes -------------------------------------------------------------
+
+xy_chr <-c("X", "Y")
+xy_genes <- getBM(attributes = c("external_gene_name", "chromosome_name", "start_position", "end_position"),
+                   filters = c("chromosome_name"),
+                   values = list(chromosome = xy_chr), #hg19 coords - extended region (PGC3 ref)
+                   mart = mart_hg19)
+xy_genes_uniq <- stringi::stri_remove_empty(unique(xy_genes$external_gene_name), na_empty = FALSE)
 
 ## Generate gene coordinate reference file ---------------------------------------------
 annot_lookup_hg19 <- as_tibble(
@@ -84,9 +96,23 @@ protein_gene_coordinates <- annot_lookup_hg19_filtered %>%
   mutate(chr = paste0("chr", chr)) %>%
   dplyr::select(chr, start, end, ensembl, hgnc)
 
+# Generate ref filtered for non-protein coding genes only and remove MHC genes ------------
+cat('Removing MHC genes from gene coord ref protein coding genes only (and writing) ...\n')
+nonprotein_gene_coordinates <- annot_lookup_hg19_filtered %>%
+  filter(gene_biotype != 'protein_coding') %>%
+  dplyr::rename(chr = "chromosome_name", ensembl = "ensembl_gene_id",
+                start = 'start_position', end = 'end_position', hgnc = 'external_gene_name') %>%
+  dplyr::select(ensembl, chr, start, end, strand, hgnc) %>%
+  filter(!hgnc %in% mhc_genes_uniq) %>%
+  write_tsv(nonprotein_ref_noMHC, col_names = FALSE) %>%
+  mutate(chr = paste0("chr", chr)) %>%
+  dplyr::select(chr, start, end, ensembl, hgnc)
+
 saveRDS(mhc_genes_uniq, mhc_genes_rds)
+saveRDS(xy_genes_uniq, xy_genes_rds)
 saveRDS(gene_coordinates, gene_coord_rds)
 saveRDS(protein_gene_coordinates, protein_gene_coord_rds)
+saveRDS(nonprotein_gene_coordinates, nonprotein_gene_coord_rds)
 
 cat('Done.\n')
 #--------------------------------------------------------------------------------------
