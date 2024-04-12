@@ -22,7 +22,7 @@ CELL_TYPES <- colnames(ctd[[LEVEL]]$specificity_quantiles)
 gene_coordinates <- readRDS(gene_coord)
 
 # Generate tables for chosen cell populations
-SIG_CELLS <- c("L4_RORB_dev-2", "L4_RORB_LRRK1", "L4_RORB_MET") 
+SIG_CELLS <- c("L4_RORB_dev-2", "L4_RORB_LRRK1", "L4_RORB_MET", "L4_RORB_dev-1", "L4_RORB_dev-fetal", "L4_RORB_MME") 
 
 for (TYPE in SIG_CELLS) { 
 all_genes <- as_tibble(as.matrix(ctd[[LEVEL]]$specificity_quantiles), rownames = 'hgnc') %>%

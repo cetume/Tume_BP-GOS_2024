@@ -68,7 +68,7 @@ head(gene_coord_obj)
 ## Remove genes in MHC region and create annotation levels ----------------------------
 raw_counts <- seurat_obj@assays$RNA@counts
 raw_counts_no_mhc <- raw_counts[!(rownames(raw_counts) %in% mhc_genes_obj), ]
-raw_counts_no_mhc_xy <- raw_counts[!(rownames(raw_counts_no_mhc) %in% xy_genes_obj), ]
+raw_counts_no_mhc_xy <- raw_counts_no_mhc[!(rownames(raw_counts_no_mhc) %in% xy_genes_obj), ]
 cat('\nMHC genes removed:', dim(raw_counts)[1] - dim(raw_counts_no_mhc)[1])
 cat('\nXY genes removed:', dim(raw_counts_no_mhc)[1] - dim(raw_counts_no_mhc_xy)[1])
 

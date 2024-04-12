@@ -85,13 +85,12 @@ CELL_TYPE:
     VIP_PCDH20.lvl2.100UP_100DOWN:
 
 GWAS:
-#    SCZ: https://figshare.com/ndownloader/files/28169757
+    SCZ: https://figshare.com/ndownloader/files/28169757
 #    SCZ_EUR_ONLY: https://figshare.com/ndownloader/files/34517828
-    HEIGHT: https://portals.broadinstitute.org/collaboration/giant/images/6/63/Meta-analysis_Wood_et_al%2BUKBiobank_2018.txt.gz
+#    HEIGHT: https://portals.broadinstitute.org/collaboration/giant/images/6/63/Meta-analysis_Wood_et_al%2BUKBiobank_2018.txt.gz
 #    ASD: https://figshare.com/ndownloader/files/28169292
 #    ADHD: https://figshare.com/ndownloader/files/40036684
 #    BPD: https://figshare.com/ndownloader/files/26603681
-#    MDD: /nfs/neurocluster/databank/c.mdnra_shared/summaryqc/restricted/wray-ripke-mattheisen-2017-mdd-23me/wray-ripke-mattheisen-2017-mdd-23me-summaryqc.tsv.gz   
 #    NEUROTICISM: https://vu.data.surfsara.nl/index.php/s/wIWJeHmseoElnON/download?path=%2F&files=neuroticism.gwas.full.txt.gz
 #    BMI: https://portals.broadinstitute.org/collaboration/giant/images/c/c8/Meta-analysis_Locke_et_al%2BUKBiobank_2018_UPDATED.txt.gz
 

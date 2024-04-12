@@ -61,6 +61,8 @@ results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/dwnSmpl_3/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/dwnSmpl_3/*.results
 results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/*.log
 results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/*.results
+results/LDSR_part_herit/baseline_v1.2/herring_nonprotein_coding/*.log
+results/LDSR_part_herit/baseline_v1.2/herring_nonprotein_coding/*.results
 #!results/LDSR_part_herit/baseline_v1.2/herring_dwnSmpl/*.tsv
 workflow/*.log
 resources/containers/*
