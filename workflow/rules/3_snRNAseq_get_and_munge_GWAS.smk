@@ -5,15 +5,6 @@ rule download_sumstats:
     message: "Download sumstats file"
     log:     "../results/00LOG/get_and_munge_GWAS/{GWAS}_download_sumstats.log"
     run:
-             if wildcards.GWAS in ("MDD"):
-
-                 shell("""
-
-                 cp {params} temp; gunzip -c temp > {output}; rm temp 2> {log}
-
-                 """)
-
-             else:
                  
                  shell("""
 
@@ -85,6 +76,14 @@ rule add_N:
  
                  """)
 
+             elif "SCZ_EUR_ONLY" in wildcards.GWAS:
+
+                 shell("""
+
+                 awk '{{s=(NR==1)?"N":"130644";$0=$0 OFS s}}1' {input} > {output} 2> {log}
+
+                 """)
+
              elif "ADHD" in wildcards.GWAS:
 
                  shell("""
@@ -106,6 +105,14 @@ rule add_N:
                  shell("""
 
                  awk '{{s=(NR==1)?"N":"413466";$0=$0 OFS s}}1' {input} > {output} 2> {log}
+
+                 """)
+
+             elif "NEUROTICISM" in wildcards.GWAS:
+
+                 shell("""
+
+                 awk '{{s=(NR==1)?"N":"313467";$0=$0 OFS s}}1' {input} > {output} 2> {log}
 
                  """)
 
