@@ -145,3 +145,18 @@ rule magma_gene_set_analysis_GO_LRRK1:
 
              """
 
+rule magma_gene_set_analysis_RORB_LRRK1_age:
+    input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
+             data = "../results/gene_lists/herring/MAGMA/RORB_LRRK1_age_dwnSmpl.txt"
+    output:  "../results/magma/snRNAseq_{GWAS}.RORB_LRRK1_age_dwnSmpl.magma.35UP_10DOWN.gsa.out"
+    params:  out = "../results/magma/snRNAseq_{GWAS}.RORB_LRRK1_age_dwnSmpl.magma.35UP_10DOWN"
+    resources: slurm_extra = "--use-conda"
+    message: "Running magma gene set analysis step for {wildcards.GWAS}"
+    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.RORB_LRRK1_age_dwnSmpl.35UP_10DOWN.35UP_10DOWN.log"
+    shell:
+             """
+
+             module load magma/1.10
+             magma --gene-results {input.genes} --set-annot {input.data} --out {params.out} &> {log}
+
+             """

@@ -13,6 +13,7 @@ results/gene_lists/herring/LDSR_top2000/classic_MHC/*
 results/gene_lists/herring/MAGMA/classic_MHC/*
 results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_final.txt
 results/magma/classic_MHC/*
+results/magma/LRRK1_age/*
 results/magma_conditional/*.magma.genes.out
 results/magma_conditional/*gsa.sets.genes.out
 results/magma_conditional/*.genes.raw
@@ -38,6 +39,7 @@ results/GWAS_for_MAGMA/*
 #results/LDSR_part_herit/baseline_v1.2/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*
+results/LDSR_part_herit/baseline_v1.2/herring/LRRK1_age/*
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*
 results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/classic_MHC/*
 results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/*.log
@@ -67,6 +69,7 @@ resources/rare_variants/*
 resources/ldsr/
 resources/raw_data/*
 resources/refs/*
+resources/python_convert/*
 resources/sheets/*
 !resources/sheets/celltypes.tsv
 !resources/sheets/celltypes_goterms.tsv

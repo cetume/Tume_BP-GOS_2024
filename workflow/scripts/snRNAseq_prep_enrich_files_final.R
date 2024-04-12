@@ -23,7 +23,9 @@ cat('\nPrepping enrichment test input files for MAGMA and SLDSR ... \n')
 seurat_obj <- toString(snakemake@input[['seurat_obj']])
 gene_coord <- toString(snakemake@input[['gene_coord']])
 protein_gene_coord <- toString(snakemake@input[['protein_gene_coord']])
+nonprotein_gene_coord <- toString(snakemake@input[['nonprotein_gene_coord']])
 mhc_genes <- toString(snakemake@input[['mhc_genes']])
+xy_genes <- toString(snakemake@input[['xy_genes']])
 ctd_outdir <- toString(snakemake@params[['ctd_outdir']])
 outdir <- toString(snakemake@params[['outdir']])
 outfile <- toString(snakemake@output)
@@ -37,9 +39,9 @@ sink(file = log, type = c("output", "message"))
 
 ## Report inputs  ---------------------------------------------------------------------
 cat('\nVariables set to: \n\n')
-tibble(Variable = c('seurat_obj', 'gene_coord', 'protein_gene_coord', 'mhc_genes', 'ctd_outdir', 'outdir',
+tibble(Variable = c('seurat_obj', 'gene_coord', 'protein_gene_coord', 'nonprotein_gene_coord', 'mhc_genes', 'xy_genes', 'ctd_outdir', 'outdir',
                     'outfile', 'study_id', 'threads'),
-       Value = c(seurat_obj, gene_coord, protein_gene_coord, mhc_genes, ctd_outdir, outdir, outfile, study_id,
+       Value = c(seurat_obj, gene_coord, protein_gene_coord, nonprotein_gene_coord, mhc_genes, xy_genes, ctd_outdir, outdir, outfile, study_id,
                  threads))
 
 dir.create(ctd_outdir,  recursive = TRUE, showWarnings = FALSE)
@@ -49,6 +51,7 @@ dir.create(outdir,  recursive = TRUE, showWarnings = FALSE)
 cat('\nLoad RDS objects ... \n\n')
 seurat_obj <- readRDS(seurat_obj)
 mhc_genes_obj <- readRDS(mhc_genes)
+xy_genes_obj <- readRDS(xy_genes)
 gene_coord_obj <- readRDS(gene_coord)
 
 cat('\nSeurat obj loaded: ... \n\n')
@@ -57,13 +60,17 @@ cat('\nSeurat metadata cols: ... \n\n')
 glimpse(seurat_obj[[]])
 cat('\nMHC obj loaded: ... \n\n')
 head(mhc_genes_obj)
+cat('\nXY obj loaded: ... \n\n')
+head(xy_genes_obj)
 cat('\ngene_coord obj loaded: ... \n\n')
 head(gene_coord_obj)
 
 ## Remove genes in MHC region and create annotation levels ----------------------------
 raw_counts <- seurat_obj@assays$RNA@counts
 raw_counts_no_mhc <- raw_counts[!(rownames(raw_counts) %in% mhc_genes_obj), ]
+raw_counts_no_mhc_xy <- raw_counts[!(rownames(raw_counts_no_mhc) %in% xy_genes_obj), ]
 cat('\nMHC genes removed:', dim(raw_counts)[1] - dim(raw_counts_no_mhc)[1])
+cat('\nXY genes removed:', dim(raw_counts_no_mhc)[1] - dim(raw_counts_no_mhc_xy)[1])
 
 # Create annotations
 annotations <- as.data.frame(cbind(as.vector(rownames(seurat_obj@meta.data)),
@@ -76,7 +83,7 @@ annotLevels <- list(level1class = annotations$level2class,
 ## Normalize - this is optional, was not used in the original EWCE publication --------
 cat('\nRunning SCT ... ', '\n\n')
 options(future.globals.maxSize = 1000 * 1024^2)
-counts_sct <- EWCE::sct_normalize(raw_counts_no_mhc)
+counts_sct <- EWCE::sct_normalize(raw_counts_no_mhc_xy)
 
 cat('\ncounts_sct class: ', class(counts_sct), '\n\n')
 
@@ -90,10 +97,10 @@ drop_genes_sct <- EWCE::drop_uninformative_genes(
 
 cat('\nGene counts:',
     '\n\nRAW:', dim(raw_counts)[1],
-    '\nRAW_NO_MHC:', dim(raw_counts_no_mhc)[1],
+    '\nRAW_NO_MHC:', dim(raw_counts_no_mhc_xy)[1],
     '\nSCT_DROP_GENES:', dim(drop_genes_sct)[1])
 
-rm(raw_counts, raw_counts_no_mhc)
+rm(raw_counts, raw_counts_no_mhc, raw_counts_no_mhc_xy)
 
 rm(counts_sct)
 
@@ -152,82 +159,127 @@ MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hg
 
 ##Additional analysis to run top 2000 genes rather than top 10% -----------------------
 
-#if (study_id == 'herring') {
-#   sub_dir <- 'herring/'
-#   magma_end <-	paste0('_lvl', level)
+if (study_id == 'herring') {
+   sub_dir <- 'herring/'
+   magma_end <-	paste0('_lvl', level)
 
-#cat('\nCreating Enrichment files for top 2000 genes ... \n\n')
-#load(paste0(ctd_outdir,	'ctd_',	study_id, '.rda'))
-#CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
+cat('\nCreating Enrichment files for top 2000 genes ... \n\n')
+load(paste0(ctd_outdir,	'ctd_',	study_id, '.rda'))
+CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
 
-#MAGMA <- as_tibble(ctd[[level]]$specificity, rownames = 'hgnc') %>%
-#    inner_join(gene_coord_obj) %>%
-#    tidyr::pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
-#    group_by(cell_type) %>%
-#    top_n(n = 2000, wt = specificity) %>%
-#    dplyr::select(cell_type, ensembl) %>%
-#    with(., split(ensembl, cell_type))
+MAGMA <- as_tibble(ctd[[level]]$specificity, rownames = 'hgnc') %>%
+    inner_join(gene_coord_obj) %>%
+    tidyr::pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
+    group_by(cell_type) %>%
+    top_n(n = 2000, wt = specificity) %>%
+    dplyr::select(cell_type, ensembl) %>%
+    with(., split(ensembl, cell_type))
 
-#  for(i in names(MAGMA)) {
+  for(i in names(MAGMA)) {
 
-#    cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
-#        file = paste0(outdir, sub_dir, 'MAGMA/', study_id, '_top2000', magma_end, '.txt')
-#        , sep = '', append = TRUE)
+    cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
+        file = paste0(outdir, sub_dir, 'MAGMA/', study_id, '_top2000', magma_end, '.txt')
+        , sep = '', append = TRUE)
 
-#  }
+  }
 
-#dir.create(paste0(outdir, sub_dir, 'LDSR_top2000/'),  recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0(outdir, sub_dir, 'LDSR_top2000/'),  recursive = TRUE, showWarnings = FALSE)
 
-#  LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity), rownames = 'hgnc') %>%
-#    inner_join(gene_coord_obj) %>%
-#    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
-#    mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
-#    group_by(cell_type) %>%
-#    top_n(n = 2000, wt = specificity) %>%
-#    dplyr::select(chr, start, end, ensembl, cell_type) %>%
-#    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top2000/',
-#                                            .y$cell_type, '.lvl', level,'.100UP_100DOWN.bed'), col_names = FALSE))
-#
-#  }
+  LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity), rownames = 'hgnc') %>%
+    inner_join(gene_coord_obj) %>%
+    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
+    mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+    group_by(cell_type) %>%
+    top_n(n = 2000, wt = specificity) %>%
+    dplyr::select(chr, start, end, ensembl, cell_type) %>%
+    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top2000/',
+                                            .y$cell_type, '.lvl', level,'.100UP_100DOWN.bed'), col_names = FALSE))
+
+  }
 
 ##Additional analysis to run protein-coding genes only (top 10%) ----------------------
 
-#if (study_id == 'herring' ) {
-#sub_dir <- 'herring/'
-#magma_end <- paste0('_lvl', level)
-#
-#cat('\nCreating Enrichment files for protein-coding genes only ... \n\n')
-#load(paste0(ctd_outdir, 'ctd_', study_id, '.rda'))
-#CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
-#
-#MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
-#      inner_join(protein_gene_coord_obj) %>%
-#      pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
-#      filter(quantile == 10) %>%
-#      dplyr::select(cell_type, ensembl) %>%
-#      with(., split(ensembl, cell_type))
+protein_gene_coord_obj <- readRDS(protein_gene_coord)
 
- #   for(i in names(MAGMA)) {
+if (study_id == 'herring' ) {
+sub_dir <- 'herring/'
+magma_end <- paste0('_lvl', level)
 
-#      cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
-#          file = paste0(outdir, sub_dir, '/MAGMA/', study_id, '_protein_coding', magma_end, '.txt'), sep = '', append = TRUE)
+cat('\nCreating Enrichment files for protein-coding genes only ... \n\n')
+load(paste0(ctd_outdir, 'ctd_', study_id, '.rda'))
+CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
 
-#    }
+MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+      inner_join(protein_gene_coord_obj) %>%
+      pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+      filter(quantile == 10) %>%
+      dplyr::select(cell_type, ensembl) %>%
+      with(., split(ensembl, cell_type))
 
-#dir.create(paste0(outdir, sub_dir, 'LDSR_protein_coding/'),  recursive = TRUE, showWarnings = FALSE)
+   for(i in names(MAGMA)) {
+
+      cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
+          file = paste0(outdir, sub_dir, '/MAGMA/', study_id, '_protein_coding', magma_end, '.txt'), sep = '', append = TRUE)
+
+    }
+
+dir.create(paste0(outdir, sub_dir, 'LDSR_protein_coding/'),  recursive = TRUE, showWarnings = FALSE)
 
 #LDSR input files - 100UP_100DOWN
-#    LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
-#        inner_join(protein_gene_coord_obj) %>%
-#        pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
-#        filter(quantile == 10) %>%
-#        mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
-#        dplyr::select(chr, start, end, ensembl, cell_type) %>%
-#        group_by(cell_type) %>%
-#        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_protein_coding/',
-#                                                .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
-#
-#}
+    LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+        inner_join(protein_gene_coord_obj) %>%
+        pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+        filter(quantile == 10) %>%
+        mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+        dplyr::select(chr, start, end, ensembl, cell_type) %>%
+        group_by(cell_type) %>%
+        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_protein_coding/',
+                                                .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
+
+}
+
+##Additional analysis to run non-protein-coding genes only (top 10%) ----------------------
+
+nonprotein_gene_coord_obj <- readRDS(nonprotein_gene_coord)
+
+if (study_id == 'herring' ) {
+  sub_dir <- 'herring/'
+  magma_end <- paste0('_lvl', level)
+  
+  cat('\nCreating Enrichment files for non-protein-coding genes only ... \n\n')
+  load(paste0(ctd_outdir, 'ctd_', study_id, '.rda'))
+  CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
+  
+  MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+        inner_join(nonprotein_gene_coord_obj) %>%
+    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+    #filter(cell_type == 'L4_RORB_dev-2') %>%
+    filter(quantile == 10) %>%
+    dplyr::select(cell_type, ensembl) %>%
+    with(., split(ensembl, cell_type))
+  
+  for(i in names(MAGMA)) {
+    
+    cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
+        file = paste0(outdir, sub_dir, '/MAGMA/', study_id, '_nonprotein_coding', magma_end, '.txt'), sep = '', append = TRUE)
+    
+  }
+  
+  dir.create(paste0(outdir, sub_dir, 'LDSR_nonprotein_coding/'),  recursive = TRUE, showWarnings = FALSE)
+  
+  #LDSR input files - 100UP_100DOWN
+  LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+    inner_join(nonprotein_gene_coord_obj) %>%
+    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+    #filter(cell_type == 'L4_RORB_dev-2') %>%
+    filter(quantile == 10) %>%
+    mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+    dplyr::select(chr, start, end, ensembl, cell_type) %>%
+    group_by(cell_type) %>%
+    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_nonprotein_coding/',
+                                            .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
+  
+}
 
 file.create(outfile)
 
