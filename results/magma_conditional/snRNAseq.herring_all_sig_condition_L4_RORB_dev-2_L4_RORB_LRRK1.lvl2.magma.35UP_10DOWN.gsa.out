@@ -1,0 +1,15 @@
+# TOTAL_GENES = 51176
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar)
+# CONDITIONED_INTERNAL = gene size, gene density, inverse mac, log(gene size), log(gene density), log(inverse mac)
+# CONDITIONED_VARIABLES = L4_RORB_dev-2_L4_RORB_LRRK1 (set)
+VARIABLE                             TYPE  MODEL  NGENES         BETA     BETA_STD           SE            P FULL_NAME
+L4_RORB_dev-2_L4_RORB_LRRK1           SET      1    3900     0.048367     0.012833     0.028021     0.042172 L4_RORB_dev-2_L4_RORB_LRRK1
+L4_RORB_dev-2                         SET      1    2297     0.068636     0.014211     0.035718     0.027331 L4_RORB_dev-2
+L4_RORB_dev-2_L4_RORB_LRRK1           SET      2    3900     0.047966     0.012727     0.022092     0.014961 L4_RORB_dev-2_L4_RORB_LRRK1
+L4_RORB_dev-2_L4_RORB_dev-fe...       SET      2    4171     0.072417     0.019814     0.021413   0.00036036 L4_RORB_dev-2_L4_RORB_dev-fetal
+L4_RORB_dev-2_L4_RORB_LRRK1           SET      3    3900     0.083196     0.022075     0.018608   3.9044e-06 L4_RORB_dev-2_L4_RORB_LRRK1
+L4_RORB_dev-fetal                     SET      3    2313     0.066145     0.013741     0.023604    0.0025383 L4_RORB_dev-fetal
+L4_RORB_dev-2_L4_RORB_LRRK1           SET      4    3900     0.050028     0.013274      0.02278     0.014045 L4_RORB_dev-2_L4_RORB_LRRK1
+L4_RORB_dev-fetal_L4_RORB_LR...       SET      4    4412     0.062167     0.017449     0.021309    0.0017657 L4_RORB_dev-fetal_L4_RORB_LRRK1
+L4_RORB_dev-2_L4_RORB_LRRK1           SET      5    3900     0.068195     0.018094     0.027657    0.0068389 L4_RORB_dev-2_L4_RORB_LRRK1
+L4_RORB_LRRK1                         SET      5    2285     0.035377    0.0073066     0.035278      0.15798 L4_RORB_LRRK1

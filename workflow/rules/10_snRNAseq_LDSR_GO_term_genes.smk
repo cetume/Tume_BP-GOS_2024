@@ -66,7 +66,7 @@ rule ldsr_stratified_summary_go_terms:
              """
 
 
-             head -1 {params.dir}snRNAseq.L4_RORB_dev_2-GO.0003008.lvl2.100UP_100DOWN.SCZ_baseline.v1.2.results > {output}
+             head -1 {params.dir}snRNAseq.L4_RORB_LRRK1-GO.0050877.lvl2.100UP_100DOWN.SCZ_baseline.v1.2.results > {output}
              File={params.cell_types_go_terms}
               Lines=$(cat $File)
              for Line in $Lines
