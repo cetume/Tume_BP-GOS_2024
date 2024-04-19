@@ -1,3 +1,5 @@
+localrules: download_sumstats
+
 rule download_sumstats:
     # Download GWAS sumstats files (see config)
     output:  "../results/GWAS/{GWAS}_hg19_raw.tsv"
@@ -5,6 +7,24 @@ rule download_sumstats:
     message: "Download sumstats file"
     log:     "../results/00LOG/get_and_munge_GWAS/{GWAS}_download_sumstats.log"
     run:
+
+             if wildcards.GWAS in ("MDD", "NEUROTICISM"):
+
+                 shell("""
+
+                 cp {params} temp; gunzip -c temp > {output}; rm temp 2> {log}
+
+                 """)
+             
+             elif wildcards.GWAS in ("SCZ_EUR_ONLY", "BPD"):
+
+                 shell("""
+
+                 wget -O - {params} | gunzip -c | sed '/##/d' > {output} 
+
+                 """)
+
+             else:
                  
                  shell("""
 
@@ -21,10 +41,10 @@ rule standardise_sumstats:
     params: "../results/GWAS/{GWAS}_hg19_raw_temp.tsv"
     log:     "../results/00LOG/get_and_munge_GWAS/{GWAS}_standardise_sumstats.log"
     run:
-             if "HEIGHT" in wildcards.GWAS:
+             if wildcards.GWAS in ("HEIGHT", "BMI"):
 
                  shell("""
-                 zcat {input} | sed 's/Tested_Allele/A1/g' | sed 's/Other_Allele/A2/g' > {params};
+                 cat {input} | sed 's/Tested_Allele/A1/g' | sed 's/Other_Allele/A2/g' > {params};
     
                  python ../resources/python_convert/sumstats.py csv \
                  --sumstats {params} \
@@ -34,7 +54,50 @@ rule standardise_sumstats:
                  rm {params}
              
                   """)
-             
+
+             elif wildcards.GWAS in ("BPD", "SCZ_EUR_ONLY"):
+
+                 shell("""
+                 cat {input} | sed 's/ID/SNP/g' | sed 's/#CHROM/CHR/g' > {params};
+
+                 python ../resources/python_convert/sumstats.py csv \
+                 --sumstats {params} \
+                 --out {output} --force --auto --head 5 \
+                 --log {log};
+
+                 rm {params}
+
+                  """)             
+
+             elif wildcards.GWAS in ("SCZ"):
+
+                 shell("""
+                 cat {input} | sed -i '/rs148878475/d' > {param};
+
+                 python ../resources/python_convert/sumstats.py csv \
+                 --sumstats {params} \
+                 --out {output} --force --auto --head 5 \
+                 --log {log};
+
+                 rm {params}
+
+                  """)
+
+             elif "NEUROTICISM" in wildcards.GWAS:
+
+                 shell("""
+ 
+                 cat {input} | sed 's/POS/BP/g' | sed 's/RSID_UKB/SNP/g' | sed 's/REF/A1/g' | sed 's/ALT/A2/g' > {params};
+
+                 python ../resources/python_convert/sumstats.py csv \
+                 --sumstats {params} \
+                 --out {output} --force --auto --head 5 \
+                 --log {log};
+
+                 rm {params}
+
+                 """)
+
              else:
 
                  shell("""
@@ -68,20 +131,21 @@ rule add_N:
     message: "Adding N to {input} if required"
     log:     "../results/00LOG/get_and_munge_GWAS/{GWAS}_addN.log"
     run:
-             if "SCZ" in wildcards.GWAS:
-             
-                 shell("""
- 
-                 awk '{{s=(NR==1)?"N":"161405";$0=$0 OFS s}}1' {input} > {output} 2> {log}
- 
-                 """)
 
-             elif "SCZ_EUR_ONLY" in wildcards.GWAS:
+             if "SCZ_EUR_ONLY" in wildcards.GWAS:
 
                  shell("""
 
                  awk '{{s=(NR==1)?"N":"130644";$0=$0 OFS s}}1' {input} > {output} 2> {log}
 
+                 """)
+
+             elif "SCZ" in wildcards.GWAS:
+             
+                 shell("""
+
+                 awk '{{s=(NR==1)?"N":"161405";$0=$0 OFS s}}1' {input} > {output} 2> {log}
+ 
                  """)
 
              elif "ADHD" in wildcards.GWAS:
@@ -123,10 +187,10 @@ rule add_N:
 rule prep_for_magma:
     # Format sumstats for MAGMA input
     # Note that snakemake make objects (e.g. input) are available without curly braces here
-    input:   "../results/03SUMSTATS/{GWAS}_hg19_withN.tsv"
-    output:  "../results/03SUMSTATS/{GWAS}_hg19_MAGMA_ready.tsv"
+    input:   "../results/GWAS/{GWAS}_hg19_withN.tsv"
+    output:  "../results/GWAS_for_MAGMA/{GWAS}_hg19_magma_ready.tsv"
     message: "Munging sumstats for MAGMA compatibility: {input}"
-    log:     "../results/00LOG/03PREP_SUMSTATS/{GWAS}_prep_for_MAGMA.log"
+    log:     "../results/00LOG/GWAS/{GWAS}_prep_for_MAGMA.log"
     run:
              import pandas as pd
              import numpy as np
@@ -140,12 +204,12 @@ rule prep_for_magma:
 rule prep_for_ldsr:
     # Format sumstats for LDSR input
     input:   snps = "../resources/ldsr/reference_files/w_hm3.snplist",
-             gwas = "../results/03SUMSTATS/{GWAS}_hg19_withN.tsv"
-    output:  "../results/03SUMSTATS/{GWAS}_hg19_LDSR_ready.sumstats.gz"
+             gwas = "../results/GWAS/{GWAS}_hg19_withN.tsv"
+    output:  "../results/GWAS_for_ldsc/{GWAS}_hg19_ldsc_ready.sumstats.gz"
     conda:   "../envs/ldsr.yml"
     message: "Munging sumstats for LDSR compatibility: {input.gwas}"
-    params:  out = "../results/03SUMSTATS/{GWAS}_hg19_LDSR_ready"
-    log:     "../results/00LOG/03PREP_SUMSTATS/{GWAS}_hg19_prep_for_ldsr.log"
+    params:  out = "../results/GWAS_for_ldsc/{GWAS}_hg19_ldsc_ready"
+    log:     "../results/00LOG/GWAS/{GWAS}_hg19_prep_for_ldsr.log"
     shell:
         """
 

@@ -82,7 +82,7 @@ rule magma_gene_set_analysis_top2000:
              """
 
 rule magma_conditional:
-    input:   gene_list = "../results/gene_lists/herring/MAGMA/herring_lvl{LEVEL}.txt",
+    input:   gene_list = "../results/gene_lists/herring/MAGMA/RORB_genes_for_cond_magma.txt",
              scz_magma = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw" 
     output:  "../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
     params:  "../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN"
