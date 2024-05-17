@@ -1,0 +1,31 @@
+# TOTAL_GENES = 51163
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar), one-sided, positive (set x set), two-sided (set x cov)
+# CONDITIONED_INTERNAL = gene size, gene density, inverse mac, log(gene size), log(gene density), log(inverse mac)
+VARIABLE                             TYPE  MODEL  TERM  NGENES         BETA     BETA_STD           SE            P FULL_NAME
+GO:0007399                            SET      1     A    2394     0.097386     0.020567     0.023896   2.3022e-05 GO:0007399
+L4_RORB_LRRK1                         SET      1     B    2286     0.049866     0.010303     0.024491     0.020874 L4_RORB_LRRK1
+INTERACT::GO:0007399::L4_ROR...  INTER-SS      1   A*B     245      0.25153     0.017364     0.075092    0.0004051 INTERACT::GO:0007399::L4_RORB_LRRK1
+GO:0042391                            SET      2     A     428      0.15087     0.013741     0.057427    0.0043065 GO:0042391
+L4_RORB_LRRK1                         SET      2     B    2286      0.06714     0.013871     0.023542    0.0021738 L4_RORB_LRRK1
+INTERACT::GO:0042391::L4_ROR...  INTER-SS      2   A*B      74      0.40046     0.015219      0.14139    0.0023124 INTERACT::GO:0042391::L4_RORB_LRRK1
+GO:0006811                            SET      3     A    1599     0.027529    0.0047902     0.028972      0.17101 GO:0006811
+L4_RORB_LRRK1                         SET      3     B    2286     0.069428     0.014344     0.024232    0.0020857 L4_RORB_LRRK1
+INTERACT::GO:0006811::L4_ROR...  INTER-SS      3   A*B     185      0.12466    0.0074829      0.08377     0.068358 INTERACT::GO:0006811::L4_RORB_LRRK1
+GO:0098660                            SET      4     A     854     0.098151     0.012575     0.040322    0.0074659 GO:0098660
+L4_RORB_LRRK1                         SET      4     B    2286     0.069381     0.014334     0.023797    0.0017766 L4_RORB_LRRK1
+INTERACT::GO:0098660::L4_ROR...  INTER-SS      4   A*B     115      0.17345     0.008214       0.1068     0.052189 INTERACT::GO:0098660::L4_RORB_LRRK1
+GO:0003008                            SET      5     A    2068     0.036082    0.0071061     0.025931     0.082046 GO:0003008
+L4_RORB_LRRK1                         SET      5     B    2286     0.062209     0.012853      0.02415    0.0050001 L4_RORB_LRRK1
+INTERACT::GO:0003008::L4_ROR...  INTER-SS      5   A*B     193       0.2155     0.013211     0.082157    0.0043604 INTERACT::GO:0003008::L4_RORB_LRRK1
+GO:0007267                            SET      6     A    1495     0.094436     0.015905     0.029985   0.00081865 GO:0007267
+L4_RORB_LRRK1                         SET      6     B    2286     0.063185     0.013054     0.024227    0.0045553 L4_RORB_LRRK1
+INTERACT::GO:0007267::L4_ROR...  INTER-SS      6   A*B     195      0.16973     0.010459     0.085007     0.022935 INTERACT::GO:0007267::L4_RORB_LRRK1
+GO:0007268                            SET      7     A     648      0.19353     0.021642     0.047628   2.4235e-05 GO:0007268
+L4_RORB_LRRK1                         SET      7     B    2286     0.069374     0.014333     0.023912      0.00186 L4_RORB_LRRK1
+INTERACT::GO:0007268::L4_ROR...  INTER-SS      7   A*B     126     0.073344    0.0036353      0.10496      0.24235 INTERACT::GO:0007268::L4_RORB_LRRK1
+GO:0019226                            SET      8     A      69      0.13527    0.0049644      0.14889       0.1818 GO:0019226
+L4_RORB_LRRK1                         SET      8     B    2286     0.075179     0.015532      0.02336    0.0006454 L4_RORB_LRRK1
+INTERACT::GO:0019226::L4_ROR...  INTER-SS      8   A*B      23      0.44219    0.0093736      0.26321     0.046484 INTERACT::GO:0019226::L4_RORB_LRRK1
+GO:0050877                            SET      9     A    1322     0.022991    0.0036477     0.033003      0.24301 GO:0050877
+L4_RORB_LRRK1                         SET      9     B    2286     0.060088     0.012414     0.023778    0.0057539 L4_RORB_LRRK1
+INTERACT::GO:0050877::L4_ROR...  INTER-SS      9   A*B     126      0.41112     0.020377       0.1036   3.6259e-05 INTERACT::GO:0050877::L4_RORB_LRRK1

@@ -1,0 +1,24 @@
+# TOTAL_GENES = 51163
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar)
+# CONDITIONED_INTERNAL = gene size, gene density, inverse mac, log(gene size), log(gene density), log(inverse mac)
+VARIABLE                             TYPE  NGENES         BETA     BETA_STD           SE            P FULL_NAME
+L4_RORB_LRRK1-GO:0003008~sys...       SET     193       0.3037     0.018618     0.075322   2.7709e-05 L4_RORB_LRRK1-GO:0003008~system_process
+L4_RORB_LRRK1-GO:0006811~ion...       SET     185       0.2145     0.012875     0.075647    0.0022891 L4_RORB_LRRK1-GO:0006811~ion_transport
+L4_RORB_LRRK1-GO:0006813~pot...       SET      52      0.17147    0.0054637      0.14654      0.12099 L4_RORB_LRRK1-GO:0006813~potassium_ion_transport
+L4_RORB_LRRK1-GO:0006836~neu...       SET      43      0.10165    0.0029457      0.14783      0.24584 L4_RORB_LRRK1-GO:0006836~neurotransmitter_transport
+L4_RORB_LRRK1-GO:0007186~G-p...       SET     106  -0.00092914  -4.2248e-05      0.10437      0.50355 L4_RORB_LRRK1-GO:0007186~G-protein_coupled_receptor_signaling_pathway
+L4_RORB_LRRK1-GO:0007267~cel...       SET     195      0.31617     0.019482      0.07671    1.885e-05 L4_RORB_LRRK1-GO:0007267~cell-cell_signaling
+L4_RORB_LRRK1-GO:0007268~che...       SET     126      0.32085     0.015903     0.091847    0.0002388 L4_RORB_LRRK1-GO:0007268~chemical_synaptic_transmission
+L4_RORB_LRRK1-GO:0007270~neu...       SET      33      0.18156    0.0046095      0.17911      0.15538 L4_RORB_LRRK1-GO:0007270~neuron-neuron_synaptic_transmission
+L4_RORB_LRRK1-GO:0007399~ner...       SET     245      0.38921     0.026869     0.067612   4.3296e-09 L4_RORB_LRRK1-GO:0007399~nervous_system_development
+L4_RORB_LRRK1-GO:0019226~tra...       SET      23      0.65164     0.013813      0.21543     0.001245 L4_RORB_LRRK1-GO:0019226~transmission_of_nerve_impulse
+L4_RORB_LRRK1-GO:0042391~reg...       SET      74      0.60717     0.023075      0.12796   1.0459e-06 L4_RORB_LRRK1-GO:0042391~regulation_of_membrane_potential
+L4_RORB_LRRK1-GO:0043269~reg...       SET      87      0.27306     0.011251      0.11147    0.0071502 L4_RORB_LRRK1-GO:0043269~regulation_of_ion_transport
+L4_RORB_LRRK1-GO:0046903~sec...       SET     114      0.23579     0.011118     0.097571    0.0078366 L4_RORB_LRRK1-GO:0046903~secretion
+L4_RORB_LRRK1-GO:0050804~mod...       SET      94      0.43536     0.018644      0.10681   2.2945e-05 L4_RORB_LRRK1-GO:0050804~modulation_of_synaptic_transmission
+L4_RORB_LRRK1-GO:0050808~syn...       SET      74      0.50636     0.019244      0.12377   2.1512e-05 L4_RORB_LRRK1-GO:0050808~synapse_organization
+L4_RORB_LRRK1-GO:0050877~neu...       SET     126      0.48566     0.024072     0.096309    2.307e-07 L4_RORB_LRRK1-GO:0050877~neurological_system_process
+L4_RORB_LRRK1-GO:0055085~tra...       SET     160      0.21334     0.011912     0.083321    0.0052296 L4_RORB_LRRK1-GO:0055085~transmembrane_transport
+L4_RORB_LRRK1-GO:0060078~reg...       SET      32      0.72791     0.018199      0.19261   7.8812e-05 L4_RORB_LRRK1-GO:0060078~regulation_of_postsynaptic_membrane_potential
+L4_RORB_LRRK1-GO:0071805~pot...       SET      47      0.18549    0.0056194      0.15181      0.11088 L4_RORB_LRRK1-GO:0071805~potassium_ion_transmembrane_transport
+L4_RORB_LRRK1-GO:0098660~ino...       SET     115      0.32993     0.015625     0.097022   0.00033661 L4_RORB_LRRK1-GO:0098660~inorganic_ion_transmembrane_transport

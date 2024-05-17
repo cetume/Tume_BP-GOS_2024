@@ -85,8 +85,7 @@ CELL_TYPE:
     VIP_PCDH20.lvl2.100UP_100DOWN:
 
 GWAS:
-    SCZ: https://figshare.com/ndownloader/files/28169757
-#    SCZ_EUR_ONLY_N: https://figshare.com/ndownloader/files/34517828
+    SCZ_EUR_ONLY: https://figshare.com/ndownloader/files/34517828
 #    HEIGHT: https://portals.broadinstitute.org/collaboration/giant/images/6/63/Meta-analysis_Wood_et_al%2BUKBiobank_2018.txt.gz
 #    ASD: https://figshare.com/ndownloader/files/28169292
 #    ADHD: https://figshare.com/ndownloader/files/40036684
@@ -123,29 +122,3 @@ CELL_TYPE_GO_TERM:
     L4_RORB_LRRK1-GO.0046903.lvl2.100UP_100DOWN:
     L4_RORB_LRRK1-GO.0050804.lvl2.100UP_100DOWN:
     L4_RORB_LRRK1-GO.0050808.lvl2.100UP_100DOWN:
-
-CONDITION:
-    L4_RORB_dev-2_L4_RORB_dev-fetal:
-    L4_RORB_dev-2_L4_RORB_LRRK1:
-    L4_RORB_dev-fetal_L4_RORB_LRRK1:
-
-COND_CELL_A:
-    L4_RORB_dev-2.lvl2.100UP_100DOWN:
-    L4_RORB_LRRK1.lvl2.100UP_100DOWN:
-    L4_RORB_dev-fetal.lvl2.100UP_100DOWN:
-
-COND_CELL_B:
-    L4_RORB_dev-2.lvl2.100UP_100DOWN:
-    L4_RORB_LRRK1.lvl2.100UP_100DOWN:
-    L4_RORB_dev-fetal.lvl2.100UP_100DOWN:
-
-COND_CELL_C:
-    L4_RORB_dev-2.lvl2.100UP_100DOWN:
-    L4_RORB_LRRK1.lvl2.100UP_100DOWN:
-    L4_RORB_dev-fetal.lvl2.100UP_100DOWN:
-
-#LRRK1_AGE:
-#    Infancy.100UP_100DOWN:
-#    Childhood.100UP_100DOWN:
-#    Adolescence.100UP_100DOWN:
-#    Adult.100UP_100DOWN:
