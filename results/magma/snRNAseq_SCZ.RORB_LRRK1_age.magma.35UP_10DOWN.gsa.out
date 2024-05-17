@@ -1,8 +1,0 @@
-# TOTAL_GENES = 51176
-# TEST_DIRECTION = one-sided, positive (set), two-sided (covar)
-# CONDITIONED_INTERNAL = gene size, gene density, inverse mac, log(gene size), log(gene density), log(inverse mac)
-VARIABLE         TYPE  NGENES         BETA     BETA_STD           SE            P
-Adolescence       SET    1636    -0.028803   -0.0050669     0.027275      0.85451
-Adult             SET    1681   -0.0033097  -0.00058992     0.026769       0.5492
-Childhood         SET    1653     0.052319    0.0092499      0.02722     0.027302
-Infancy           SET    1668     0.084147     0.014942     0.027243    0.0010056
