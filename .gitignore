@@ -52,6 +52,7 @@ results/GWAS/*
 #results/LDSR_part_herit/baseline_v1.2/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*
+results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_LRRK1_age_SCZ_EUR_ONLY_baseline.v1.2_summary.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/old/*
 results/LDSR_part_herit/baseline_v1.2/herring/LRRK1_age/*
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*
@@ -85,7 +86,7 @@ resources/rare_variants/*
 resources/ldsr/
 resources/raw_data/*
 resources/refs/*
-resources/python_convert/*
+resources/python_convert/
 resources/sheets/*
 !resources/sheets/celltypes.tsv
 !resources/sheets/celltypes_goterms.tsv
