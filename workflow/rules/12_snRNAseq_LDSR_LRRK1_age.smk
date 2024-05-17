@@ -39,7 +39,7 @@ rule ldsr_ld_scores_LRRK1_age:
 
 rule ldsr_stratified_baseline_v12_LRRK1_age:
     input:   GWAS = "../results/GWAS_for_ldsc/{GWAS}_hg19_ldsc_ready.sumstats.gz",
-             LDSR = expand("../results/LDSR_annotation_files/herring/snRNAseq.{LRRK1_AGE}.{CHR}.l2.ldscore.gz", project = config["project"], LRRK1_AGE = config["LRRK1_AGE"], CHR = range(1,23))
+             LDSR = expand("../results/LDSR_annotation_files/herring/snRNAseq.{LRRK1_AGE}.{CHR}.l2.ldscore.gz", LRRK1_AGE = config["LRRK1_AGE"], CHR = range(1,23))
     output:  "../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq.{LRRK1_AGE}.{GWAS}_baseline.v1.2.results"
     resources: slurm_extra = "--use-conda"
     conda:   "../envs/ldsr.yml"
@@ -56,7 +56,7 @@ rule ldsr_stratified_baseline_v12_LRRK1_age:
              "--frqfile-chr {params.frqfile} --out {params.out_file} --print-coefficients 2> {log}"
 
 rule ldsr_stratified_summary_LRRK1_age:
-    input:   LDSR = expand("../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq.{LRRK1_AGE}.{GWAS}_baseline.v1.2.results", project = config["project"], LRRK1_AGE = config["LRRK1_AGE"], GWAS = config["GWAS"])
+    input:   LDSR = expand("../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq.{LRRK1_AGE}.{GWAS}_baseline.v1.2.results", LRRK1_AGE = config["LRRK1_AGE"], GWAS = config["GWAS"])
     output:  "../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_LRRK1_age_{GWAS}_baseline.v1.2_summary.tsv"
     resources: slurm_extra = "--use-conda"
     message: "Creating summary file for snRNAseq: {wildcards.GWAS} GWAS"
@@ -67,7 +67,7 @@ rule ldsr_stratified_summary_LRRK1_age:
              """
 
 
-             head -1 {params.dir}snRNAseq.Infancy.100UP_100DOWN.SCZ_baseline.v1.2.results > {output}
+             head -1 {params.dir}snRNAseq.Infancy.100UP_100DOWN.SCZ_EUR_ONLY_baseline.v1.2.results > {output}
              File={params.ages}
               Lines=$(cat $File)
              for Line in $Lines

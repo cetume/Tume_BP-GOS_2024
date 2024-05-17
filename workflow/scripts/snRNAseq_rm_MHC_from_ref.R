@@ -80,6 +80,7 @@ gene_coordinates <- annot_lookup_hg19_filtered %>%
                 start = 'start_position', end = 'end_position', hgnc = 'external_gene_name') %>% 
   dplyr::select(ensembl, chr, start, end, strand, hgnc) %>%
   filter(!hgnc %in% mhc_genes_uniq) %>% 
+  filter(!hgnc %in% xy_genes_uniq) %>%
   write_tsv(ref_noMHC, col_names = FALSE) %>%
   mutate(chr = paste0("chr", chr)) %>%
   dplyr::select(chr, start, end, ensembl, hgnc)  
@@ -92,6 +93,7 @@ protein_gene_coordinates <- annot_lookup_hg19_filtered %>%
                 start = 'start_position', end = 'end_position', hgnc = 'external_gene_name') %>%
   dplyr::select(ensembl, chr, start, end, strand, hgnc) %>%
   filter(!hgnc %in% mhc_genes_uniq) %>%
+  filter(!hgnc %in% xy_genes_uniq) %>%
   write_tsv(protein_ref_noMHC, col_names = FALSE) %>%
   mutate(chr = paste0("chr", chr)) %>%
   dplyr::select(chr, start, end, ensembl, hgnc)
@@ -104,6 +106,7 @@ nonprotein_gene_coordinates <- annot_lookup_hg19_filtered %>%
                 start = 'start_position', end = 'end_position', hgnc = 'external_gene_name') %>%
   dplyr::select(ensembl, chr, start, end, strand, hgnc) %>%
   filter(!hgnc %in% mhc_genes_uniq) %>%
+  filter(!hgnc %in% xy_genes_uniq) %>%
   write_tsv(nonprotein_ref_noMHC, col_names = FALSE) %>%
   mutate(chr = paste0("chr", chr)) %>%
   dplyr::select(chr, start, end, ensembl, hgnc)

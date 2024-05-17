@@ -9,8 +9,9 @@
 # ---------  SET SMK PARAMS  ----------
 configfile: "../config/config.yaml"
 
-include: "rules/11_snRNAseq_LDSR_conditional.smk"
-#include: "rules/10_snRNAseq_LDSR_GO_term_genes.smk"
+#include: "rules/12_snRNAseq_LDSR_LRRK1_age.smk"
+#include: "rules/11_snRNAseq_LDSR_conditional.smk"
+include: "rules/10_snRNAseq_LDSR_GO_term_genes.smk"
 #include: "rules/9_snRNAseq_LDSR_top2000.smk"
 #include: "rules/8_snRNAseq_LDSR_nonprotein_coding.smk"
 #include: "rules/7_snRNAseq_LDSR_protein_coding.smk"
@@ -26,24 +27,25 @@ include: "rules/4_snRNAseq_MAGMA.smk"
 rule all:
     input:
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_LRRK1_age_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_LRRK1_age - rules12
-        "../results/LDSR_part_herit/baseline_v1.2/herring_conditional_both/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv", #herring_conditional - rules11
-#        expand("../results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_GO_term_genes - rules10
+#        "../results/LDSR_part_herit/baseline_v1.2/herring_conditional_both/snRNAseq_LDSR_SCZ_baseline.v1.2_summary.tsv", #herring_conditional - rules11
+        expand("../results/LDSR_part_herit/baseline_v1.2/herring_GO_term_genes/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_GO_term_genes - rules10
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_top2000/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_top2000 - rules9
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_nonprotein_coding/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']), #herring_nonprotein_coding - rules8 
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring_protein_coding/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring_protein_coding - rules7
 #        expand("../results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_{GWAS}_baseline.v1.2_summary.tsv", GWAS = config['GWAS']),#herring - rules6
 #        expand("../results/magma/snRNAseq_{GWAS}.herring_nonprotein_coding.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_nonprotein_coding - rules5
 #        expand("../results/magma/snRNAseq_{GWAS}.herring_protein_coding.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_protein_coding - rules5
-#        expand("../results/magma/snRNAseq_{GWAS}.RORB_LRRK1_age_dwnSmpl.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS']),
-#        "../results/magma/snRNAseq_SCZ.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out", 
-#        "../results/magma/snRNAseq_SCZ.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out", #herring_GO_term_genes_interactions - rules4         
-#        "../results/magma/snRNAseq_SCZ.GO_term_genes.magma.35UP_10DOWN.gsa.out", #herring_GO_term_genes - rules4
-        expand("../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", CONDITION = config['CONDITION'], LEVEL = config['LEVEL']), #herring_conditional - rule4
+#        expand("../results/magma/snRNAseq_{GWAS}.RORB_LRRK1_age.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS']),
+#        expand("../results/magma/snRNAseq_{GWAS}.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS']), 
+#        expand("../results/magma/snRNAseq_{GWAS}.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS']), #herring_GO_term_genes_interactions - rules4         
+        expand("../results/magma/snRNAseq_{GWAS}.GO_term_genes.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS']), #herring_GO_term_genes - rules4
+#        expand("../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", CONDITION = config['CONDITION'], LEVEL = config['LEVEL']), #herring_conditional - rule4
 #        expand("../results/magma/snRNAseq_{GWAS}.herring_top2000.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring_top2000 - rules4
 #        expand("../results/magma/snRNAseq_{GWAS}.herring.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out", GWAS = config['GWAS'], LEVEL = config['LEVEL']),#herring - rules4
 #        expand("../results/GWAS_for_ldsc/{GWAS}_hg19_ldsc_ready.sumstats.gz", GWAS = config['GWAS']),#rules3
 #        expand("../results/GWAS_for_MAGMA/{GWAS}_hg19_magma_ready.tsv", GWAS = config['GWAS']),#rules3
 #        expand("../results/gene_lists/prep_enrichment_file_only_{project}.done", project = config['project']),#rules2
 #        expand("../results/gene_lists/prep_enrichment_file_{project}.done", project = config['project']),#rules2
+#        "../results/R_objects/Ensembl_hg19_gene_coords_noMHC.rds"
 #        "../results/R_objects/seurat_herring.rds",#rules1
 #        "../resources/raw_data/herring_2022/data_for_R/herring_counts_geneMeta.csv",#rules1
