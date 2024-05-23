@@ -22,6 +22,7 @@ library(readr)
 cat('\nPrepping enrichment test input files for MAGMA and SLDSR ... \n')
 gene_coord <- toString(snakemake@input[['gene_coord']])
 protein_gene_coord <- toString(snakemake@input[['protein_gene_coord']])
+nonprotein_gene_coord <- toString(snakemake@input[['nonprotein_gene_coord']])
 ctd_object <- toString(snakemake@input[['ctd_object']])
 outdir <- toString(snakemake@params[['outdir']])
 outfile <- toString(snakemake@output)
@@ -35,9 +36,9 @@ sink(file = log, type = c("output", "message"))
 
 ## Report inputs  ---------------------------------------------------------------------
 cat('\nVariables set to: \n\n')
-tibble(Variable = c('gene_coord', 'protein_gene_coord', 'ctd_object', 'outdir',
+tibble(Variable = c('gene_coord', 'protein_gene_coord', 'nonprotein_gene_coord', 'ctd_object', 'outdir',
                     'outfile', 'study_id', 'threads'),
-       Value = c(gene_coord, protein_gene_coord, ctd_object, outdir, outfile, study_id,
+       Value = c(gene_coord, protein_gene_coord, nonprotein_gene_coord, ctd_object, outdir, outfile, study_id,
                  threads))
 
 dir.create(outdir,  recursive = TRUE, showWarnings = FALSE)
@@ -46,16 +47,12 @@ dir.create(outdir,  recursive = TRUE, showWarnings = FALSE)
 cat('\nLoad RDS objects ... \n\n')
 gene_coord_obj <- readRDS(gene_coord)
 protein_gene_coord_obj <- readRDS(protein_gene_coord)
+nonprotein_gene_coord_obj <- readRDS(nonprotein_gene_coord)
 
 ## Create enrichment files for MAGMA and LDSR -----------------------------------------
 
-if (study_id == 'herring') {
-   sub_dir <- 'herring/'
-   magma_end <- paste0('_lvl', level)
-} else {
-   sub_dir <- 'herring_dwnSmpl/'
-   magma_end <- ''
-}
+sub_dir <- 'herring/'
+magma_end <- paste0('_lvl', level)
 
 #MAGMA input files - 35UP_10DOWN
 cat('\nCreating Enrichment files for', study_id, ' ... \n\n')
@@ -81,23 +78,19 @@ MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hg
     }
 
 #LDSR input files - 100UP_100DOWN
-#    LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
-#        inner_join(gene_coord_obj) %>%
-#        pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
-#        filter(quantile == 10) %>%
-#        mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
-#        dplyr::select(chr, start, end, ensembl, cell_type) %>%
-#        group_by(cell_type) %>%
-#        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, '/LDSR/',
-#                                                .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
+    LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+        inner_join(gene_coord_obj) %>%
+        pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+        filter(quantile == 10) %>%
+        mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+        dplyr::select(chr, start, end, ensembl, cell_type) %>%
+        group_by(cell_type) %>%
+        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, '/LDSR/',
+                                                .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
 
 
 
 ##Additional analysis to run top 2000 genes rather than top 10% -----------------------
-
-if (study_id == 'herring' ) {
-sub_dir <- 'herring/'
-magma_end <- paste0('_lvl', level)
 
 cat('\nCreating Enrichment files for top 2000 genes ... \n\n')
 load(ctd_object)
@@ -119,26 +112,19 @@ MAGMA <- as_tibble(ctd[[level]]$specificity, rownames = 'hgnc') %>%
 
   }
 
-#dir.create(paste0(outdir, sub_dir, 'LDSR_top2000/'),  recursive = TRUE, showWarnings = FALSE)
+dir.create(paste0(outdir, sub_dir, 'LDSR_top2000/'),  recursive = TRUE, showWarnings = FALSE)
 
-#  LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity), rownames = 'hgnc') %>%
-#    inner_join(gene_coord_obj) %>%
-#    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
-#    mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
-#    group_by(cell_type) %>%
-#    top_n(n = 2000, wt = specificity) %>%
-#    dplyr::select(chr, start, end, ensembl, cell_type) %>%
-#    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top2000/',
-#                                            .y$cell_type, '.lvl', level,'.100UP_100DOWN.bed'), col_names = FALSE))
-
-  }
-
+  LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity), rownames = 'hgnc') %>%
+    inner_join(gene_coord_obj) %>%
+    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'specificity') %>%
+    mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+    group_by(cell_type) %>%
+    top_n(n = 2000, wt = specificity) %>%
+    dplyr::select(chr, start, end, ensembl, cell_type) %>%
+    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top2000/',
+                                            .y$cell_type, '.lvl', level,'.100UP_100DOWN.bed'), col_names = FALSE))
 
 ##Additional analysis to run protein-coding genes only (top 10%) ----------------------
-
-if (study_id == 'herring' ) {
-sub_dir <- 'herring/'
-magma_end <- paste0('_lvl', level)
 
 cat('\nCreating Enrichment files for protein-coding genes only ... \n\n')
 load(ctd_object)
@@ -158,20 +144,53 @@ MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hg
 
     }
 
-#dir.create(paste0(outdir, sub_dir, 'LDSR_protein_coding/'),  recursive = TRUE, showWarnings = FALSE)
-#
-#    LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
-#        inner_join(protein_gene_coord_obj) %>%
-#        pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
-#        filter(quantile == 10) %>%
-#        mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
-#        dplyr::select(chr, start, end, ensembl, cell_type) %>%
-#        group_by(cell_type) %>%
-#        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_protein_coding/',
-#                                                .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
+dir.create(paste0(outdir, sub_dir, 'LDSR_protein_coding/'),  recursive = TRUE, showWarnings = FALSE)
 
- }
+    LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+        inner_join(protein_gene_coord_obj) %>%
+        pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+        filter(quantile == 10) %>%
+        mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+        dplyr::select(chr, start, end, ensembl, cell_type) %>%
+        group_by(cell_type) %>%
+        group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_protein_coding/',
+                                                .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
 
+##Additional analysis to run non-protein-coding genes only (top 10%) ----------------------
+
+  cat('\nCreating Enrichment files for non-protein-coding genes only ... \n\n')
+  load(ctd_object)
+  CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
+  
+  MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+        inner_join(nonprotein_gene_coord_obj) %>%
+    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+    #filter(cell_type == 'L4_RORB_dev-2') %>%
+    filter(quantile == 10) %>%
+    dplyr::select(cell_type, ensembl) %>%
+    with(., split(ensembl, cell_type))
+  
+  for(i in names(MAGMA)) {
+    
+    cat(i, " ", paste(MAGMA[[i]], collapse = " "), "\n",
+        file = paste0(outdir, sub_dir, '/MAGMA/', study_id, '_nonprotein_coding', magma_end, '.txt'), sep = '', append = TRUE)
+    
+  }
+  
+  dir.create(paste0(outdir, sub_dir, 'LDSR_nonprotein_coding/'),  recursive = TRUE, showWarnings = FALSE)
+  
+ #LDSR input files - 100UP_100DOWN
+  LDSR <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hgnc') %>%
+    inner_join(nonprotein_gene_coord_obj) %>%
+    pivot_longer(all_of(CELL_TYPES), names_to = 'cell_type', values_to = 'quantile') %>%
+    #filter(cell_type == 'L4_RORB_dev-2') %>%
+    filter(quantile == 10) %>%
+    mutate(start = ifelse(start - 100000 < 0, 0, start - 100000), end = end + 100000) %>%
+    dplyr::select(chr, start, end, ensembl, cell_type) %>%
+    group_by(cell_type) %>%
+    group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_nonprotein_coding/',
+                                            .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
+  
 file.create(outfile)
 
 #--------------------------------------------------------------------------------------

@@ -7,11 +7,12 @@
 ##Load packages  ----------------------------------------------------------------------
 cat('\nLoading packages ... \n\n')
 library(EWCE)
+library(tidyverse)
 
 ##  Set variables  --------------------------------------------------------------------
-CTD_DIR <- 'Herring_snRNAseq_2023_pipeline/results/ctd_object/' 
-OUT_DIR <- 'Herring_snRNAseq_2023_pipeline/resources/go_terms/'
-gene_coord <- 'Herring_snRNAseq_2023_pipeline/results/R_objects/Ensembl_hg19_gene_coords_noMHC.rds'
+CTD_DIR <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/ctd_objects/' 
+OUT_DIR <- '~/Desktop/Herring_snRNAseq_2023_pipeline/resources/go_terms/'
+gene_coord <- '~/Desktop/Herring_snRNAseq_2023_pipeline/results/R_objects/Ensembl_hg19_gene_coords_noMHC.rds'
 LEVEL <- 2
 
 ## Load and prepare data --------------------------------------------------------------
@@ -22,7 +23,7 @@ CELL_TYPES <- colnames(ctd[[LEVEL]]$specificity_quantiles)
 gene_coordinates <- readRDS(gene_coord)
 
 # Generate tables for chosen cell populations
-SIG_CELLS <- c("L4_RORB_dev-2", "L4_RORB_LRRK1", "L4_RORB_MET", "L4_RORB_dev-1", "L4_RORB_dev-fetal", "L4_RORB_MME") 
+SIG_CELLS <- "L4_RORB_LRRK1" 
 
 for (TYPE in SIG_CELLS) { 
 all_genes <- as_tibble(as.matrix(ctd[[LEVEL]]$specificity_quantiles), rownames = 'hgnc') %>%

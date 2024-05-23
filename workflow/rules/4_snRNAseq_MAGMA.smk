@@ -49,22 +49,6 @@ rule magma_gene_set_analysis:
 
              """
 
-rule magma_gene_set_analysis_dwnSmpl:
-    input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
-             data = "../results/gene_lists/herring_dwnSmpl/MAGMA/herring_dwnSmpl_lvl{LEVEL}.txt"
-    output:  "../results/magma/snRNAseq_{GWAS}.herring_dwnSmpl.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.herring_dwnSmpl.lvl{LEVEL}.magma.35UP_10DOWN"
-    resources: slurm_extra = "--use-conda"
-    message: "Running magma gene set analysis step for dwnSmpl {wildcards.GWAS}, cluster level {wildcards.LEVEL}"
-    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.herring_dwnSmpl.35UP_10DOWN.lvl{LEVEL}.35UP_10DOWN.log"
-    shell:
-             """
-
-             module load magma/1.10
-             magma --gene-results {input.genes} --set-annot {input.data} --out {params.out} &> {log}
-
-             """
-
 rule magma_gene_set_analysis_top2000:
     input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
              data = "../results/gene_lists/herring/MAGMA/herring_top2000_lvl{LEVEL}.txt"
@@ -81,21 +65,6 @@ rule magma_gene_set_analysis_top2000:
 
              """
 
-rule magma_conditional:
-    input:   gene_list = "../results/gene_lists/herring/MAGMA/RORB_genes_for_cond_magma.txt",
-             scz_magma = "../results/magma/snRNAseq_SCZ.magma.35UP_10DOWN.genes.raw" 
-    output:  "../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN.gsa.out"
-    params:  "../results/magma_conditional/snRNAseq.herring_all_sig_condition_{CONDITION}.lvl{LEVEL}.magma.35UP_10DOWN"
-    message: "Running MAGMA on all significant cell types conditioning on {wildcards.CONDITION}, lvl{wildcards.LEVEL}"
-    log:     "../results/logs/magma/magma_conditional/snRNAseq.magma.conditional.{CONDITION}.lvl{LEVEL}.log"
-    shell:
-             """
-
-             module load magma/1.10
-             magma --gene-results {input.scz_magma} --set-annot {input.gene_list} --model condition={wildcards.CONDITION} --out {params} &> {log}
-
-             """
-
 rule magma_gene_set_analysis_GO:
     input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
              data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_magma.txt"
@@ -104,55 +73,6 @@ rule magma_gene_set_analysis_GO:
     resources: slurm_extra = "--use-conda"
     message: "Running magma gene set analysis step for {wildcards.GWAS}, GO term genes"
     log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.herring_GO_term_genes.35UP_10DOWN.log"
-    shell:
-             """
-
-             module load magma/1.10
-             magma --gene-results {input.genes} --set-annot {input.data} --out {params.out} &> {log}
-
-             """
-
-rule magma_GO_LRRK1_interactions:
-    input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
-             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_all.txt",
-             interaction_list = "../resources/sheets/interaction_list"
-    output:  "../results/magma/snRNAseq_{GWAS}.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.GO_term_genes_inter.magma.35UP_10DOWN"
-    resources: slurm_extra = "--use-conda"
-    message: "Running magma gene set analysis step for {wildcards.GWAS}, GO term genes interactions"
-    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.herring_GO_term_genes_inter.35UP_10DOWN.log"
-    shell:
-             """
-
-             module load magma/1.10
-             magma --gene-results {input.genes} --set-annot {input.data} --model interaction={input.interaction_list} interaction-ss-size=20,0.01 --out {params.out} &> {log}
-
-             """
-
-rule magma_gene_set_analysis_GO_LRRK1:
-    input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
-             data = "../results/gene_lists/herring/MAGMA/GO_term_genes_for_cond_magma_all.txt",
-    output:  "../results/magma/snRNAseq_{GWAS}.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.GO_term_genes_LRRK1.magma.35UP_10DOWN"
-    resources: slurm_extra = "--use-conda"
-    message: "Running magma gene set analysis step for {wildcards.GWAS}, GO term genes interactions"
-    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.herring_GO_term_genes_inter.35UP_10DOWN.log"
-    shell:
-             """
-
-             module load magma/1.10
-             magma --gene-results {input.genes} --set-annot {input.data} --out {params.out} &> {log}
-
-             """
-
-rule magma_gene_set_analysis_RORB_LRRK1_age:
-    input:   genes = "../results/magma/snRNAseq_{GWAS}.magma.35UP_10DOWN.genes.raw",
-             data = "../results/gene_lists/herring/MAGMA/RORB_LRRK1_age.txt"
-    output:  "../results/magma/snRNAseq_{GWAS}.RORB_LRRK1_age.magma.35UP_10DOWN.gsa.out"
-    params:  out = "../results/magma/snRNAseq_{GWAS}.RORB_LRRK1_age.magma.35UP_10DOWN"
-    resources: slurm_extra = "--use-conda"
-    message: "Running magma gene set analysis step for {wildcards.GWAS}"
-    log:     "../results/logs/magma/snRNAseq.gene_set_analysis.{GWAS}.RORB_LRRK1_age.35UP_10DOWN.35UP_10DOWN.log"
     shell:
              """
 

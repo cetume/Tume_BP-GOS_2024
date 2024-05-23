@@ -1,4 +1,4 @@
-# Genetic Implication of Layer 4 Glutamatergic Neurons of the Prefrontal Cortex in the Pathophysiology of Schizophrenia
+# Genetic Implication of Specific Glutamatergic Neurons of the Prefrontal Cortex in the Pathophysiology of Schizophrenia
 
 This project was carried out in the Division of Psychological Medicine and Clinical Neurosciences (DPMCN). The workflow follows the the snakemake distribution and reproducibility recommendations.
 
@@ -10,7 +10,7 @@ The snRNAseq data for this study was taken from [Herring et al. (2022)](https://
 
 #### Scripts:
 1. [snRNAseq_prep_herring_data.py](workflow/scripts/snRNAseq_prep_herring_data.py) - Extract cell and gene metadata from snRNAseq dataset
-2. [snRNAseq_prep_herring_data_and_dwnSmpl_final.R](workflow/scripts/snRNAseq_prep_herring_data_and_dwnSmpl_final.R) - Prepare Herring data for analysis 
+2. [snRNAseq_prep_herring_data.R](workflow/scripts/snRNAseq_prep_herring_data.R) - Prepare Herring data for analysis 
 3. [snRNAseq_rm_MHC_from_ref.R](workflow/scripts/snRNAseq_rm_MHC_from_ref.R) - Prepare genome reference for MAGMA and LDSR
 4. [snRNAseq_prep_enrich_files_final.R](workflow/scripts/snRNAseq_prep_enrich_files_final.R) - Generate specificity scores and top 10% genesets for enrichment analyses
 5. [snRNAseq_prep_enrich_files_only.R](workflow/scripts/snRNAseq_prep_enrich_files_only.R) - Generate top 10% genesets for enrichment analyses when ctd object is already available

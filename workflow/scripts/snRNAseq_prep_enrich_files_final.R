@@ -113,13 +113,8 @@ ctd_path <- EWCE::generate_celltype_data(exp = drop_genes_sct,
 
 ## Create enrichment files for MAGMA and LDSR -----------------------------------------
 
-if (study_id == 'herring') {
-   sub_dir <- 'herring/'
-   magma_end <- paste0('_lvl', level)
-} else {
-   sub_dir <- 'herring_dwnSmpl/'
-   magma_end <- ''
-}
+sub_dir <- 'herring/'
+magma_end <- paste0('_lvl', level)
 
 #MAGMA input files - 35UP_10DOWN
 cat('\nCreating Enrichment files for', study_id, ' ... \n\n')
@@ -159,10 +154,6 @@ MAGMA <- as_tibble(as.matrix(ctd[[level]]$specificity_quantiles), rownames = 'hg
 
 ##Additional analysis to run top 2000 genes rather than top 10% -----------------------
 
-if (study_id == 'herring') {
-   sub_dir <- 'herring/'
-   magma_end <-	paste0('_lvl', level)
-
 cat('\nCreating Enrichment files for top 2000 genes ... \n\n')
 load(paste0(ctd_outdir,	'ctd_',	study_id, '.rda'))
 CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
@@ -195,15 +186,9 @@ dir.create(paste0(outdir, sub_dir, 'LDSR_top2000/'),  recursive = TRUE, showWarn
     group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_top2000/',
                                             .y$cell_type, '.lvl', level,'.100UP_100DOWN.bed'), col_names = FALSE))
 
-  }
-
 ##Additional analysis to run protein-coding genes only (top 10%) ----------------------
 
 protein_gene_coord_obj <- readRDS(protein_gene_coord)
-
-if (study_id == 'herring' ) {
-sub_dir <- 'herring/'
-magma_end <- paste0('_lvl', level)
 
 cat('\nCreating Enrichment files for protein-coding genes only ... \n\n')
 load(paste0(ctd_outdir, 'ctd_', study_id, '.rda'))
@@ -236,16 +221,10 @@ dir.create(paste0(outdir, sub_dir, 'LDSR_protein_coding/'),  recursive = TRUE, s
         group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_protein_coding/',
                                                 .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
 
-}
-
 ##Additional analysis to run non-protein-coding genes only (top 10%) ----------------------
 
 nonprotein_gene_coord_obj <- readRDS(nonprotein_gene_coord)
 
-if (study_id == 'herring' ) {
-  sub_dir <- 'herring/'
-  magma_end <- paste0('_lvl', level)
-  
   cat('\nCreating Enrichment files for non-protein-coding genes only ... \n\n')
   load(paste0(ctd_outdir, 'ctd_', study_id, '.rda'))
   CELL_TYPES <- colnames(ctd[[level]]$specificity_quantiles)
@@ -279,8 +258,6 @@ if (study_id == 'herring' ) {
     group_walk(~ write_tsv(.x[,1:4], paste0(outdir, sub_dir, 'LDSR_nonprotein_coding/',
                                             .y$cell_type, '.lvl', level, '.100UP_100DOWN.bed'), col_names = FALSE))
   
-}
-
 file.create(outfile)
 
 #--------------------------------------------------------------------------------------

@@ -61,17 +61,6 @@ seurat_herring <- AddMetaData(seurat_herring, sub_clusters_cell_count)
 # Filter cell populations
 seurat_herring <- subset(seurat_herring, subset = cell_count_per_cluster >= 50) #2 cell populations removed (Oligo-6 and Oligo-7)
 
-## Downsample data - standardise cell count across cell populations -------------------
-
-set.seed(123)
-
-# Sub clusters - downsampled to 300 cells - 76/84 have >300 cells
-seurat_herring_dwnSmpl_lvl2 <- seurat_herring
-Idents(seurat_herring_dwnSmpl_lvl2) <- seurat_herring_dwnSmpl_lvl2@meta.data$sub_clust
-seurat_herring_dwnSmpl_lvl2  <- subset(seurat_herring_dwnSmpl_lvl2, downsample = 300)
-table(seurat_herring_dwnSmpl_lvl2@meta.data$sub_clust)
-
-## Save RDS objects  ------------------------------------------------------------------
-saveRDS(object = seurat_herring_dwnSmpl_lvl2, paste0(r_dir, 'seurat_herring_dwnSmpl_lvl2.rds'))
+## Save RDS object  ------------------------------------------------------------------
 saveRDS(object = seurat_herring, paste0(r_dir, 'seurat_herring.rds'))
 
