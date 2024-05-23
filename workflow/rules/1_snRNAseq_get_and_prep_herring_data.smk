@@ -25,15 +25,14 @@ rule prep_herring_data_for_R:
     script:  
              "../scripts/snRNAseq_prep_herring_data.py"
 
-rule prep_herring_data_and_dwnSmpl_for_ctd:
+rule prep_herring_data_for_ctd:
     input:  counts = "../resources/raw_data/herring_2022/data_for_R/herring_counts.mtx",
             cellMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_cellMeta.csv",
             geneMeta = "../resources/raw_data/herring_2022/data_for_R/herring_counts_geneMeta.csv"
-    output: herring = "../results/R_objects/seurat_herring.rds", 
-            herring_dwnSmpl_2 = "../results/R_objects/seurat_herring_dwnSmpl_lvl2.rds"
+    output: herring = "../results/R_objects/seurat_herring.rds" 
     resources: tasks = 1, mem_mb = 25000, slurm_extra = "--use-singularity"
     singularity: "../resources/containers/snrna-seq_herring_complete_latest.sif"
     params: r_dir = "../results/R_objects/"
     log:    "../results/00LOG/prep_enrich_files/snRNAseq_prep_herring_data.log"
     script:
-            "../scripts/snRNAseq_prep_herring_data_and_dwnSmpl_final.R"
+            "../scripts/snRNAseq_prep_herring_data.R"

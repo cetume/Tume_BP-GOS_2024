@@ -1,6 +1,7 @@
 workflow/.snakemake/*
 workflow/.cache/
 workflow/rules/old/*
+workflow/rules/old/12_snRNAseq_LDSR_LRRK1_age.smk
 workflow/scripts/old/*
 resources/go_terms/*
 results/00LOG/*
