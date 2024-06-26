@@ -20,6 +20,7 @@ results/gene_lists/herring_dwnSmpl/*
 results/magma/classic_MHC/*
 results/magma/snRNAseq_SCZ.*
 results/magma/snRNAseq_SCZ_EUR_ONLY_N.*
+results/magma/snRNAseq_BMI.*
 results/magma/snRNAseq_SCZ_EUR_ONLY.RORB_LRRK1_age.*
 results/magma/snRNAseq_SCZ_EUR_ONLY.GO_term_genes_LRRK1.magma.35UP_10DOWN.gsa.out
 results/magma/snRNAseq_SCZ_EUR_ONLY.GO_term_genes_inter.magma.35UP_10DOWN.gsa.out
@@ -54,6 +55,7 @@ results/GWAS/*
 #!results/LDSR_part_herit/baseline_v1.2/*.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/classic_MHC/*
 results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_LRRK1_age_SCZ_EUR_ONLY_baseline.v1.2_summary.tsv
+results/LDSR_part_herit/baseline_v1.2/herring/snRNAseq_LDSR_BMI_baseline.v1.2_summary.tsv
 results/LDSR_part_herit/baseline_v1.2/herring/old/*
 results/LDSR_part_herit/baseline_v1.2/herring/LRRK1_age/*
 results/LDSR_part_herit/baseline_v1.2/herring_top2000/classic_MHC/*

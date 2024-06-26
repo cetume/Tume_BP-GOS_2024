@@ -92,8 +92,6 @@ GWAS:
 #    MDD: /nfs/neurocluster/databank/c.mdnra_shared/summaryqc/restricted/wray-ripke-mattheisen-2017-mdd-23me/wray-ripke-mattheisen-2017-mdd-23me-summaryqc.tsv.gz
 #    BPD: https://figshare.com/ndownloader/files/26603681
 #    NEUROTICISM: ../results/GWAS/neuroticism.gwas.full.txt.gz
-#    BMI: https://portals.broadinstitute.org/collaboration/giant/images/c/c8/Meta-analysis_Locke_et_al%2BUKBiobank_2018_UPDATED.txt.gz
-
 
 LEVEL:
     2:
