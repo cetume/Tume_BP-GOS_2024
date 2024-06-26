@@ -41,21 +41,8 @@ rule standardise_sumstats:
     params: "../results/GWAS/{GWAS}_hg19_raw_temp.tsv"
     log:     "../results/00LOG/get_and_munge_GWAS/{GWAS}_standardise_sumstats.log"
     run:
-             if wildcards.GWAS in ("HEIGHT", "BMI"):
 
-                 shell("""
-                 cat {input} | sed 's/Tested_Allele/A1/g' | sed 's/Other_Allele/A2/g' > {params};
-    
-                 python ../resources/python_convert/sumstats.py csv \
-                 --sumstats {params} \
-       	         --out {output} --force --auto --head 5 \
-                 --log {log};
-
-                 rm {params}
-             
-                  """)
-
-             elif wildcards.GWAS in ("BPD", "SCZ_EUR_ONLY"):
+             if wildcards.GWAS in ("BPD", "SCZ_EUR_ONLY"):
 
                  shell("""
                  cat {input} | sed 's/ID/SNP/g' | sed 's/#CHROM/CHR/g' > {params};
@@ -67,18 +54,20 @@ rule standardise_sumstats:
 
                  rm {params}
 
-                  """)             
+                  """)
 
-             elif "SCZ" in wildcards.GWAS:
+             elif "HEIGHT" in wildcards.GWAS:
 
                  shell("""
-                 sed -i '/rs148878475/d' {input};
-
+                 cat {input} | sed 's/Tested_Allele/A1/g' | sed 's/Other_Allele/A2/g' > {params};
+    
                  python ../resources/python_convert/sumstats.py csv \
-                 --sumstats {input} \
-                 --out {output} --force --auto --head 5 \
+                 --sumstats {params} \
+       	         --out {output} --force --auto --head 5 \
                  --log {log};
 
+                 rm {params}
+             
                   """)
 
              elif "NEUROTICISM" in wildcards.GWAS:
@@ -136,14 +125,6 @@ rule add_N:
 
                  awk '{{s=(NR==1)?"N":"130644";$0=$0 OFS s}}1' {input} > {output} 2> {log}
 
-                 """)
-
-             elif "SCZ" in wildcards.GWAS:
-             
-                 shell("""
-
-                 awk '{{s=(NR==1)?"N":"161405";$0=$0 OFS s}}1' {input} > {output} 2> {log}
- 
                  """)
 
              elif "ADHD" in wildcards.GWAS:
