@@ -1,8 +1,8 @@
 # Genetic Implication of Specific Glutamatergic Neurons of the Prefrontal Cortex in the Pathophysiology of Schizophrenia
 
-This project was carried out in the Division of Psychological Medicine and Clinical Neurosciences (DPMCN). The workflow follows the the snakemake distribution and reproducibility recommendations.
+This project was carried out in the Division of Psychological Medicine and Clinical Neurosciences (DPMCN), Cardiff University. This work has been published as: Claire E. Tume, Sophie L. Chick, Peter A. Holmans, Elliott Rees, Michael C. O’Donovan, Darren Cameron & Nicholas J. Bray (2024) Genetic Implication of Specific Glutamatergic Neurons of the Prefrontal Cortex in the Pathophysiology of Schizophrenia, Biological Psychiatry: Global Open Science, DOI:https://doi.org/10.1016/j.bpsgos.2024.100345.
 
-A snakemake pipeline to process snRNAseq data, from downloading the data to testing gene set enrichment.
+The workflow follows the snakemake distribution and reproducibility recommendations. A snakemake pipeline to process snRNAseq data, from downloading the data to testing gene set enrichment.
 
 The snRNAseq data for this study was taken from [Herring et al. (2022)](https://doi.org/10.1016/j.cell.2022.09.039):
 
