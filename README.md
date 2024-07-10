@@ -54,5 +54,5 @@ The Snakemake file includes rules from 11 files. To run the entire pipeline, rul
 
 By default, this pipeline will analyse 84 cell sub-cluster populations. 
 
-#### Copyright and Licence Information
+#### Copyright and Licence Information:
 See the [LICENCE file](LICENCE.md)
